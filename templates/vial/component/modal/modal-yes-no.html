@@ -1,0 +1,7 @@
+<div class="flex flex-col gap-2">
+    <div class="{{style.text_style}}">{{data.text}}</div>
+    <div class="flex justify-center gap-5">
+        <button class="{{style.confirm_style}}" onclick="{{data.confirm_js_call}} Vial.component.modal.close('{{data.modal_id}}')">{{data.confirm_text}}</button>
+        <button class="{{style.cancel_style}}" onclick="Vial.component.modal.close('{{data.modal_id}}')">{{data.cancel_text}}</button>
+    </div>
+</div>

@@ -1,0 +1,4 @@
+{
+  "db_connection_string": "postgresql://localhost:5432/cabinet?user=postgres&password=1234",
+  "collection_path": "/home/ludek/ProjectData/PhotoCabinet"
+}

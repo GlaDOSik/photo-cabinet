@@ -1,0 +1,1 @@
+SERVER_URL = ["server.url", "http://localhost:5000"]
