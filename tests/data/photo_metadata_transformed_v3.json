@@ -1,0 +1,62 @@
+[
+  {
+    "g0": "ExifTool",
+    "tags": {
+      "ExifToolVersion": 13.10
+    }
+  },
+  {
+    "g0": "File",
+    "tags": {
+      "FileType": "JPEG",
+      "MIMEType": "image/jpeg",
+      "YCbCrSubSampling": "YCbCr4:4:4 (1 1)"
+    }
+  },
+  {
+    "g0": "File",
+    "g1": "System",
+    "tags": {
+      "FileName": "ROM_4530.jpg",
+      "FileSize": "8.1 MB",
+      "FileModifyDate": "2025:09:24 16:06:53+02:00"
+    }
+  },
+  {
+    "g0": "EXIF",
+    "g1": "IFD0",
+    "tags": {
+      "Make": "NIKON CORPORATION",
+      "ModifyDate": "2025:09:15 01:18:01"
+    }
+  },
+  {
+    "g0": "EXIF",
+    "g1": "ExifIFD",
+    "tags": {
+      "ExposureTime": "1/400",
+      "FNumber": 2.8
+    }
+  },
+  {
+    "g0": "ICC_Profile",
+    "tags": {
+      "ProfileDescription": "sRGB IEC61966-2.1",
+      "BlueTRC": "(Binary data 2060 bytes, use -b option to extract)"
+    }
+  },
+  {
+    "g0": "ICC_Profile",
+    "g1": "ICC-header",
+    "tags": {
+      "ProfileCMMType": "Linotronic"
+    }
+  },
+  {
+    "g0": "ICC_Profile",
+    "g1": "ICC-view",
+    "tags": {
+      "ViewingCondIlluminant": "19.6445 20.3718 16.8089"
+    }
+  }
+]

@@ -1,0 +1,8 @@
+---
+alwaysApply: true
+---
+
+- dbe objects are using Mapped or mapped_column if needed
+- repository methods (find_by_id,...) are in scripts with dbe objects
+- prefer service scripts with plain methods than long lived singletons
+- in request scope, get Session obj from g var: transaction_session = getattr(g, "transaction_session", None)

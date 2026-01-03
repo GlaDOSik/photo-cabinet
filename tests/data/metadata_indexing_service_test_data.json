@@ -1,0 +1,44 @@
+{
+  "EXIF": {
+    "tags": {
+      "ExposureTime": "1/5000",
+      "FNumber": 2.8
+    },
+    "g1": {
+      "IFD0": {
+        "Software": "Adobe Lightroom 8.5.1 (Macintosh)",
+        "ModifyDate": "2025:09:15 01:18:06"
+      },
+      "IFD1": {
+        "Compression": "JPEG (old-style)",
+        "XResolution": 72
+      }
+    }
+  },
+  "XMP": {
+    "g1": {
+      "XMP-crs": {
+        "MaskGroupBasedCorrections": [
+          {
+            "CorrectionMasks": [
+              {
+                "FullMaskSize": "2886,1920",
+                "InputDigest": "96078B9E52C1B0F9371C24297D99E90F"
+              },
+              {
+                "FullMaskSize": "120,120",
+                "InputDigest": "dsfsdgdgds"
+              }
+            ]
+          }
+        ],
+        "Look": {
+          "Group": "Modern",
+          "Parameters": {
+            "ConvertToGrayscale": false
+          }
+        }
+      }
+    }
+  }
+}

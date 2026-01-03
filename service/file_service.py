@@ -1,4 +1,5 @@
-from typing import Tuple
+import uuid
+from typing import Tuple, List
 from uuid import UUID
 
 from sqlalchemy import select, literal
@@ -7,6 +8,7 @@ from sqlalchemy.orm import Session, aliased
 from dbe.folder import Folder
 from dbe.photo import Photo
 from domain.folder_content import FolderContent
+
 
 
 def get_breadcrumb(session: Session, folder_id: uuid.UUID) -> List[Folder]:

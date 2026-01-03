@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+- blueprint/api - REST endpoints annotated flask-smorest
+- dbe - database objects with repository methods - SQLAlchemy Mapped
+- domain - simple domain objects or enums
+- service - service logic methods

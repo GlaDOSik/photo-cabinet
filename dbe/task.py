@@ -16,6 +16,7 @@ class Task(Base):
     __tablename__ = "task"
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    name: Mapped[Optional[str]]
 
     type: Mapped[TaskType] = mapped_column(
         SAEnum(

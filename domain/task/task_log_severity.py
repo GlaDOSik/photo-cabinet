@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import Enum, auto
 
 
 class TaskLogSeverity(Enum):
-    ERROR = "err"
-    WARNING = "wrn"
-    INFO = "inf"
+    ERROR = auto()
+    WARNING = auto()
+    INFO = auto()
