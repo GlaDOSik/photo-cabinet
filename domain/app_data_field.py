@@ -37,6 +37,8 @@ def parse_to(type, s: str):
 
 class AppDataField(Enum):
     EXIFTOOL_VERSION = (auto(), str, None)
+    THUMBNAIL_GENERATION = (auto(), bool, True)
+    THUMBNAIL_SIZE_PX = (auto(), int, 150)
 
     def __new__(cls, value, field_type, default_value):
         obj = object.__new__(cls)

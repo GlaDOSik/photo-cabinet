@@ -150,3 +150,13 @@ def parse_date(value: Any, patterns: List[Tuple[str, bool]] = DATE_PATTERNS) -> 
     
     return None
 
+def parse_int(value) -> Optional[int]:
+    if value is None:
+        return None
+    if isinstance(value, int):
+        return value
+    if isinstance(value, str):
+        try:
+            return int(value)
+        except ValueError:
+            return None

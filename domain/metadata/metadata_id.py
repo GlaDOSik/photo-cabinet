@@ -13,7 +13,8 @@ class MetadataId:
 
     def get_key(self):
         path_part = f"{self.path}." if self.path else ""
-        return f"{self.group_0}:{self.group_1}:{path_part}{self.tag_name}"
+        group_1_part = self.group_1 if self.group_1 else ""
+        return f"{self.group_0}:{group_1_part}:{path_part}{self.tag_name}"
 
     @staticmethod
     def of(metadata_group_0: MetadataGroup0, metadata_group_1: MetadataGroup1 | None, metadata_name: MetadataName):

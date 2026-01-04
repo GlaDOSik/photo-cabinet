@@ -4,6 +4,8 @@ import logging
 from flask_cors import CORS
 from flask_smorest import Api
 from blueprint.api import api_blueprint
+from blueprint.api.content.content_api import content_api
+from blueprint.api.folder.folder_api import folder_api
 from blueprint.api.settings.indexing.indexing_api import indexing_api
 from blueprint.api.task.task_api import task_api
 from blueprint.api.settings.settings_api import settings_api
@@ -61,4 +63,7 @@ def register_blueprints(app: Flask):
     settings_api.register_blueprint(task_api)
     settings_api.register_blueprint(indexing_api)
     api_blueprint.register_blueprint(settings_api)
+    api_blueprint.register_blueprint(folder_api)
+    api_blueprint.register_blueprint(content_api)
+
     api.register_blueprint(api_blueprint)

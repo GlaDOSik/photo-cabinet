@@ -25,6 +25,12 @@ class MetadataIndex(Base):
     photo_created: Mapped[Optional[datetime]]
     photo_created_origin: Mapped[Optional[str]] # MetadataId key
 
+    width: Mapped[Optional[int]]
+    height: Mapped[Optional[int]]
+    size_origin: Mapped[Optional[str]]
+
+    use_thumbnail: Mapped[bool] = mapped_column(default=False)
+    preview_color_hex: Mapped[str]
 
 def find_by_photo_id(session: Session, photo_id: UUID):
     return session.query(MetadataIndex).filter_by(photo_id=photo_id).first()

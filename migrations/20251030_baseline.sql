@@ -40,10 +40,12 @@ CREATE TABLE public.metadata_indexing_group (
 	id uuid NOT NULL,
 	created timestamp NOT NULL,
 	group_name varchar NOT NULL,
-	"type" varchar(5) NOT NULL,
 	file_path_match varchar NULL,
+	group_type varchar(18) NOT NULL,
+	filter_type varchar(5) NULL,
 	CONSTRAINT metadata_indexing_group_pkey PRIMARY KEY (id)
 );
+
 
 -- public.task definition
 
@@ -117,25 +119,28 @@ CREATE TABLE public.folder (
 	id uuid NOT NULL,
 	parent_id uuid NULL,
 	"name" varchar NOT NULL,
+	folder_type varchar(10) NOT NULL,
 	CONSTRAINT folder_pkey PRIMARY KEY (id),
 	CONSTRAINT folder_parent_id_fkey FOREIGN KEY (parent_id) REFERENCES public.folder(id) ON DELETE CASCADE
 );
 
 
--- public.metadata_indexing_filter definition
+-- public.metadata_indexing_tag definition
 
 -- Drop table
 
--- DROP TABLE public.metadata_indexing_filter;
+-- DROP TABLE public.metadata_indexing_tag;
 
-CREATE TABLE public.metadata_indexing_filter (
+CREATE TABLE public.metadata_indexing_tag (
 	id uuid NOT NULL,
 	group_id uuid NOT NULL,
+	"order" int4 NOT NULL,
 	g0 varchar NULL,
 	g1 varchar NULL,
 	tag_name varchar NULL,
-	CONSTRAINT metadata_indexing_filter_pkey PRIMARY KEY (id),
-	CONSTRAINT metadata_indexing_filter_group_id_fkey FOREIGN KEY (group_id) REFERENCES public.metadata_indexing_group(id) ON DELETE CASCADE
+	tag_path varchar NULL,
+	CONSTRAINT metadata_indexing_tag_pkey PRIMARY KEY (id),
+	CONSTRAINT metadata_indexing_tag_group_id_fkey FOREIGN KEY (group_id) REFERENCES public.metadata_indexing_group(id) ON DELETE CASCADE
 );
 
 
@@ -151,7 +156,6 @@ CREATE TABLE public.photo (
 	file_path varchar NOT NULL,
 	file_hash varchar NOT NULL,
 	"name" varchar NOT NULL,
-	created timestamp NULL,
 	CONSTRAINT photo_pkey PRIMARY KEY (id),
 	CONSTRAINT photo_folder_id_fkey FOREIGN KEY (folder_id) REFERENCES public.folder(id) ON DELETE CASCADE
 );
@@ -169,6 +173,8 @@ CREATE TABLE public.photo_metadata (
 	exif_json jsonb NOT NULL,
 	user_json jsonb NULL,
 	effective_json jsonb NULL,
+	photo_created timestamp NULL,
+	photo_created_origin varchar NULL,
 	CONSTRAINT photo_metadata_pkey PRIMARY KEY (id),
 	CONSTRAINT photo_metadata_photo_id_fkey FOREIGN KEY (photo_id) REFERENCES public.photo(id) ON DELETE CASCADE
 );
@@ -193,8 +199,8 @@ CREATE TABLE public.task_log (
 
 -- Create default root folders
 INSERT INTO public.folder
-(id, parent_id, "name")
-VALUES('1587573f-2748-4562-8ffe-4b96506302da'::uuid, NULL, 'ROOT');
+(id, parent_id, "name", folder_type)
+VALUES('1587573f-2748-4562-8ffe-4b96506302da'::uuid, NULL, 'ROOT', 'COLLECTION');
 INSERT INTO public.folder
-(id, parent_id, "name")
-VALUES('177f99c4-84c8-4005-9103-ebde67fed9e4'::uuid, NULL, 'LIMBO');
+(id, parent_id, "name", folder_type)
+VALUES('177f99c4-84c8-4005-9103-ebde67fed9e4'::uuid, NULL, 'LIMBO', 'LIMBO');

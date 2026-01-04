@@ -1,13 +1,15 @@
 import uuid
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 from uuid import UUID
 
-from sqlalchemy import select, literal
+from sqlalchemy import select, literal, desc, asc, nullslast
 from sqlalchemy.orm import Session, aliased
 
 from dbe.folder import Folder
 from dbe.photo import Photo
 from domain.folder_content import FolderContent
+from domain.ordering_type import OrderingType
+from indexing.dbe.metadata_index import MetadataIndex
 
 
 
@@ -40,11 +42,34 @@ def get_breadcrumb(session: Session, folder_id: uuid.UUID) -> List[Folder]:
         .order_by(ancestors.c.depth.desc())
     ).all()
 
-def get_folder_contents(session: Session, folder_id: UUID) -> FolderContent:
+def get_folder_contents(session: Session, folder_id: UUID, ordering_type: Optional[OrderingType] = None) -> FolderContent:
+    if ordering_type is None:
+        ordering_type = OrderingType.ALPHABETICAL_ASC
+    
+    # Order folders - always alphabetical (folders don't have created date)
+    if ordering_type == OrderingType.ALPHABETICAL_ASC or ordering_type == OrderingType.CREATED_DATE_ASC:
+        folder_order = Folder.name
+    else:  # ALPHABETICAL_DESC or CREATED_DATE_DESC
+        folder_order = desc(Folder.name)
+    
     child_folders = session.scalars(
-        select(Folder).where(Folder.parent_id == folder_id).order_by(Folder.name)
+        select(Folder).where(Folder.parent_id == folder_id).order_by(folder_order)
     ).all()
+    
+    # Order photos
+    if ordering_type == OrderingType.ALPHABETICAL_ASC:
+        photo_order = Photo.name
+    elif ordering_type == OrderingType.ALPHABETICAL_DESC:
+        photo_order = desc(Photo.name)
+    elif ordering_type == OrderingType.CREATED_DATE_ASC:
+        photo_order = nullslast(asc(MetadataIndex.photo_created))
+    else:  # CREATED_DATE_DESC
+        photo_order = nullslast(desc(MetadataIndex.photo_created))
+    
     photos = session.scalars(
-        select(Photo).where(Photo.folder_id == folder_id).order_by(Photo.filename)
+        select(Photo)
+        .outerjoin(MetadataIndex, Photo.id == MetadataIndex.photo_id)
+        .where(Photo.folder_id == folder_id)
+        .order_by(photo_order)
     ).all()
     return FolderContent(child_folders, photos)

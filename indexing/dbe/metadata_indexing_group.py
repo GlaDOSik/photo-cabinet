@@ -51,7 +51,7 @@ def find_by_id(session: Session, id: UUID):
     return session.query(MetadataIndexingGroup).filter_by(id=id).first()
 
 
-def find_matching_groups(session: Session, file_path: str, group_type: GroupType):
+def find_matching_groups(session: Session, file_path: str, group_type: GroupType) -> List[MetadataIndexingGroup]:
     """
     Find all groups that match the given file path and group_type.
     Returns groups where file_path_match is None (global) or where

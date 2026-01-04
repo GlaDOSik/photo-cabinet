@@ -38,6 +38,12 @@ class Photo(Base):
 def get_all(session: Session):
     return session.query(Photo).all()
 
+def get_all_paginated(session: Session, offset: int = 0, limit: int = 1000):
+    return session.query(Photo).offset(offset).limit(limit).all()
+
+def find_by_id(session: Session, id):
+    return session.query(Photo).filter_by(id=id).first()
+
 def find_by_path(session: Session, relative_path: str) -> Optional[Photo]:
     return session.query(Photo).filter_by(file_path=relative_path).first()
 

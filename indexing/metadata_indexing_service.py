@@ -1,25 +1,36 @@
 import json
 from datetime import datetime
-from typing import Dict, Any, List, Optional
-
-from sqlalchemy.orm import Session
+from typing import Dict, Any, List
 
 from dbe.photo import Photo
-from domain.metadata.metadata_group_0 import MetadataGroup0
 from domain.metadata.metadata_id import MetadataId
-from domain.metadata.metadata_name import MetadataName
-from domain.metadata.metadata_sets import CREATE_DATE_SET
 from indexing.domain.created_date_result import CreatedDateResult
 from indexing.domain.filter_type import FilterType
-from indexing.dbe.metadata_index import MetadataIndex, find_by_photo_id as find_metadata_by_photo_id
-from indexing.dbe.metadata_indexing_group import find_matching_groups, MetadataIndexingGroup
+from indexing.dbe.metadata_indexing_group import MetadataIndexingGroup
 from exiftool.exif_service import run_command
 from exiftool.exiftool_command import ExiftoolCommand, EXIFTOOL_JSON_OPT, EXIFTOOL_GROUP_OPT, EXIFTOOL_STRUCT_OPT
-from indexing.domain.group_type import GroupType
+from indexing.domain.photo_size_result import PhotoSizeResult
 from indexing.domain.searched_tags_result import SearchedTagsResult
 from domain.metadata import metadata_parsers, metadata_defined
 
-# result: SearchedTagsResult = search_tag_value(session, photo, GroupType.CREATED_DATE_GROUP, CREATE_DATE_SET)
+def get_photo_size(result: SearchedTagsResult) -> PhotoSizeResult:
+    width = None
+    width_origin = None
+    height = None
+    height_origin = None
+    for found_metadata_id in result.searched_tags:
+        if "width" in found_metadata_id.tag_name.lower():
+            width_raw = result.get_value(found_metadata_id)
+            if width is None:
+                width = metadata_parsers.parse_int(width_raw)
+                width_origin = found_metadata_id.get_key()
+        if "height" in found_metadata_id.tag_name.lower():
+            height_raw = result.get_value(found_metadata_id)
+            if height is None:
+                height = metadata_parsers.parse_int(height_raw)
+                height_origin = found_metadata_id.get_key()
+    return PhotoSizeResult(width, height, width_origin, height_origin)
+
 # returns one parsed created date from result
 def get_created_date(result: SearchedTagsResult) -> CreatedDateResult:
     for found_metadata_id in result.searched_tags:
@@ -56,17 +67,15 @@ def get_created_date(result: SearchedTagsResult) -> CreatedDateResult:
 
 
 # Search tag value in index. Find in tags defined by user in DB or by default list
-def search_tag_value(session: Session, photo: Photo, group_type: GroupType, default_tags: [MetadataId]) -> SearchedTagsResult:
+def search_tag_value(photo: Photo, matching_groups: List[MetadataIndexingGroup], default_tags: [MetadataId]) -> SearchedTagsResult:
     if photo.metadata_index is None:
         return SearchedTagsResult()
 
-    groups = find_matching_groups(session, photo.file_path, group_type)
-
     metadata_set: [MetadataId] = list()
-    if len(groups) == 0:
+    if len(matching_groups) == 0:
         metadata_set = default_tags
     else:
-        close_match_group = _get_closest_match(groups)
+        close_match_group = _get_closest_match(matching_groups)
         for indexing_tag in close_match_group.tags:
             if indexing_tag.g0 is None or indexing_tag.tag_name is None:
                 pass # TODO validation problem
@@ -225,19 +234,16 @@ def search_tag_value_by_tags(photo: Photo, searched_tags: [MetadataId]) -> Searc
     
     return result
 
-def create_update_metadata_index(session: Session, photo: Photo):
-    # Get all matching groups (global and path-specific)
-    groups = find_matching_groups(session, photo.file_path, GroupType.INDEXING_FILTER)
-    
+def get_metadata_index_from_file(photo_path: str, filtering_groups: List[MetadataIndexingGroup]) -> Dict[str, Any]:
     # Create ExiftoolCommand with base options
     command = (ExiftoolCommand()
                .with_option(EXIFTOOL_JSON_OPT)
                .with_option(EXIFTOOL_GROUP_OPT)
                .with_option(EXIFTOOL_STRUCT_OPT)
-               .with_file(photo.get_photo_file_path()))
+               .with_file(photo_path))
     
     # Process each group and its filters
-    for group in groups:
+    for group in filtering_groups:
         for filter_item in group.filters:
             if group.filter_type == FilterType.ALLOW:
                 command.include_tag(filter_item.g0, filter_item.g1, filter_item.tag_name)
@@ -245,16 +251,9 @@ def create_update_metadata_index(session: Session, photo: Photo):
                 command.exclude_tag(filter_item.g0, filter_item.g1, filter_item.tag_name)
     
     # Run the command to get JSON data
-    json_data = run_command(command)
-    
-    # Parse and update metadata index
-    parsed_metadata = _parse_metadata_index(json_data)
-    if photo.metadata_index is None:
-        metadata_index = MetadataIndex()
-        metadata_index.photo_id = photo.id
-        session.add(metadata_index)
-    else:
-        photo.metadata_index.exif_json = parsed_metadata
+    json_data: str = run_command(command)
+    # Parse index
+    return _parse_metadata_index(json_data)
 
 def _parse_metadata_index(json_data: str) -> Dict[str, Any]:
     """

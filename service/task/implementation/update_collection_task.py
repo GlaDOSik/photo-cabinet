@@ -4,21 +4,31 @@ from typing import Optional, Set, List
 from uuid import uuid4, UUID
 import hashlib
 
+from domain.app_data_field import AppDataField
 from domain.metadata.metadata_sets import CREATE_DATE_SET
 from domain.task.pc_task import PhotoCabinetTask
 from domain.task.task_type import TaskType
 from domain.task.task_log_severity import TaskLogSeverity
-from indexing.domain.group_type import GroupType
+from domain.folder_type import FolderType
+from indexing.domain.photo_size_result import PhotoSizeResult
 from vial.config import app_config
 import pc_configuration
-from dbe.folder import Folder, find_root as find_root_folder
-from dbe.photo import Photo, find_by_path as find_photo_by_path, find_by_hash as find_photo_by_hash, get_all as get_all_photos
-from indexing import metadata_indexing_service
+from dbe.folder import Folder, find_root as find_root_folder, find_limbo, get_all_by_type, ROOT_FOLDER_ID
+from dbe.photo import Photo, find_by_path as find_photo_by_path, find_by_hash as find_photo_by_hash, get_all_paginated
+from indexing import metadata_indexing_facade
+from dbe.app_data import get_app_data_val
+from service import image_facade
 
 
 class RunScanAndIndexingTask(PhotoCabinetTask):
     # Supported image file extensions
     IMAGE_EXTENSIONS: Set[str] = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif', '.webp', '.raw', '.cr2', '.nef', '.arw'}
+
+    def __init__(self):
+        self.existing_folders: Set[UUID] = set()
+        self.existing_photos: Set[UUID] = set()
+        self.thumbnail_generation_enabled = False
+        self.thumbnail_size = 10
 
     def get_type(self) -> TaskType:
         return TaskType.UPDATE_COLLECTION
@@ -33,6 +43,9 @@ class RunScanAndIndexingTask(PhotoCabinetTask):
         return task
 
     def execute(self):
+        self.thumbnail_generation_enabled = get_app_data_val(self.task_transaction, AppDataField.THUMBNAIL_GENERATION)
+        self.thumbnail_size = get_app_data_val(self.task_transaction, AppDataField.THUMBNAIL_SIZE_PX)
+
         self.current_folder: List[UUID] = []
         root = Path(app_config.get_configuration(pc_configuration.COLLECTION_PATH))
         
@@ -53,7 +66,7 @@ class RunScanAndIndexingTask(PhotoCabinetTask):
         self._scan_folder(root, root_folder)
         
         # Cleanup: remove photos from database that no longer exist on disk
-        # self._cleanup_missing_photos(root)
+        self._cleanup_missing_data(root)
         
         self.log_message("Collection update completed")
 
@@ -112,6 +125,7 @@ class RunScanAndIndexingTask(PhotoCabinetTask):
 
             self.task_transaction.flush()
             self._save_metadata(existing_photo) # refresh file metadata
+            self.existing_photos.add(existing_photo.id)
             self.increment_current_progress()
             return
 
@@ -125,42 +139,87 @@ class RunScanAndIndexingTask(PhotoCabinetTask):
         self.task_transaction.flush()
 
         self._save_metadata(photo)
+        self.existing_photos.add(photo.id)
         self.increment_current_progress()
 
     def _save_metadata(self, photo: Photo):
         """Extract and save EXIF metadata for a photo."""
         try:
-            metadata_indexing_service.create_update_metadata_index(self.task_transaction, photo)
+            metadata_indexing_facade.create_update_metadata_index(self.task_transaction, photo)
             self.task_transaction.flush()
-            search_tag_result = metadata_indexing_service.search_tag_value(self.task_transaction, photo, GroupType.CREATED_DATE_GROUP, CREATE_DATE_SET)
-            create_date_result = metadata_indexing_service.get_created_date(search_tag_result)
+
+            created_date_tags = metadata_indexing_facade.search_created_date_tags(self.task_transaction, photo)
+            create_date_result = metadata_indexing_facade.get_created_date(created_date_tags)
             if create_date_result.metadata_id is not None:
                 photo.metadata_index.photo_created = create_date_result.created_date
                 photo.metadata_index.photo_created_origin = create_date_result.metadata_id.get_key()
+
+            if self.thumbnail_generation_enabled:
+                image_facade.generate_thumbnail(photo, self.thumbnail_size)
+
+            photo_size_tags = metadata_indexing_facade.search_photo_size_tags(self.task_transaction, photo)
+            photo_size_result: PhotoSizeResult = metadata_indexing_facade.get_photo_size(photo, photo_size_tags)
+            photo.metadata_index.width = photo_size_result.width
+            photo.metadata_index.height = photo_size_result.height
+            photo.metadata_index.size_origin = f"Width: {photo_size_result.width_origin}, Height: {photo_size_result.height_origin}"
+
+            photo.metadata_index.preview_color_hex = image_facade.get_dominant_color_quantize(photo)
             
         except Exception as e:
             self.log_message(f"Error extracting metadata for {photo.name}: {str(e)}", severity=TaskLogSeverity.WARNING)
 
-    # TODO - archive to limbo
-    def _cleanup_missing_photos(self, root_path: Path):
-        """Remove photos from database that no longer exist on disk."""
-        self.log_message("Cleaning up missing photos...")
-
-        # TODO - not that way - dont get all photos
-        # Get all photos from database
-        all_photos = get_all_photos(self.task_transaction)
+    def _cleanup_missing_data(self, root_path: Path):
+        """Move photos and folders that no longer exist on disk to limbo."""
+        self.log_message("Starting cleanup of missing photos and folders")
         
-        deleted_count = 0
-        for photo in all_photos:
-            photo_full_path = root_path / photo.file_path
-            if not photo_full_path.exists():
-                self.log_message(f"Deleting missing photo from DB: {photo.file_path}")
-                self.task_transaction.delete(photo)
-                deleted_count += 1
+        # Get limbo folder
+        limbo_folder = find_limbo(self.task_transaction)
+        if limbo_folder is None:
+            self.log_message("Limbo folder not found, skipping cleanup", severity=TaskLogSeverity.WARNING)
+            return
         
-        if deleted_count > 0:
+        # Cleanup photos: move to limbo if not in existing_photos
+        batch_size = 1000
+        offset = 0
+        photos_moved = 0
+        
+        while True:
+            photos = get_all_paginated(self.task_transaction, offset=offset, limit=batch_size)
+            if not photos:
+                break
+            
+            for photo in photos:
+                if photo.id not in self.existing_photos:
+                    photo.folder_id = limbo_folder.id
+                    photos_moved += 1
+            
             self.task_transaction.flush()
-            self.log_message(f"Deleted {deleted_count} missing photos from database")
+            offset += batch_size
+        
+        if photos_moved > 0:
+            self.log_message(f"Moved {photos_moved} photos to limbo")
+        
+        # Cleanup folders: delete COLLECTION folders not in existing_folders
+        offset = 0
+        folders_deleted = 0
+        
+        while True:
+            folders = get_all_by_type(self.task_transaction, FolderType.COLLECTION, offset=offset, limit=batch_size)
+            if not folders:
+                break
+            
+            for folder in folders:
+                if folder.id not in self.existing_folders:
+                    # Skip root and limbo folders
+                    if folder.id != ROOT_FOLDER_ID and folder.id != limbo_folder.id:
+                        self.task_transaction.delete(folder)
+                        folders_deleted += 1
+            
+            self.task_transaction.flush()
+            offset += batch_size
+        
+        if folders_deleted > 0:
+            self.log_message(f"Deleted {folders_deleted} folders that no longer exist")
 
     def _get_or_create_folder(self, folder_name: str, parent_id: Optional[UUID]) -> Folder:
         """Get existing folder or create new one."""
@@ -180,9 +239,11 @@ class RunScanAndIndexingTask(PhotoCabinetTask):
             folder = Folder()
             folder.name = folder_name
             folder.parent_id = parent_id
+            folder.folder_type = FolderType.COLLECTION
             self.task_transaction.add(folder)
             self.task_transaction.flush()
-        
+
+        self.existing_folders.add(folder.id)
         return folder
 
     def _is_image_file(self, path: Path) -> bool:

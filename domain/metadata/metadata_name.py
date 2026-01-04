@@ -8,6 +8,10 @@ class MetadataName(Enum):
     OFFSET_TIME_ORIG = (auto(), "OffsetTimeOriginal")
     OFFSET_TIME_DIGIT = (auto(), "OffsetTimeDigitized")
     TIME_CREATED = (auto(), "TimeCreated")
+    IMAGE_WIDTH = (auto(), "ImageWidth")
+    IMAGE_HEIGHT = (auto(), "ImageHeight")
+    EXIF_IMAGE_WIDTH = (auto(), "ExifImageWidth")
+    EXIF_IMAGE_HEIGHT = (auto(), "ExifImageHeight")
 
     def __new__(cls, value, metadata_name):
         obj = object.__new__(cls)

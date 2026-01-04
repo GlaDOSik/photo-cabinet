@@ -2,6 +2,7 @@ from enum import Enum, auto
 
 
 class MetadataGroup0(Enum):
+    FILE = (auto(), "File")
     EXIF = (auto(), "EXIF")
     XMP = (auto(), "XMP")
     IPTC = (auto(), "IPTC")
