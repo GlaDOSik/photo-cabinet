@@ -29,6 +29,7 @@ class RunScanAndIndexingTask(PhotoCabinetTask):
         self.existing_photos: Set[UUID] = set()
         self.thumbnail_generation_enabled = False
         self.thumbnail_size = 10
+        self.thumbnail_quality = 85
 
     def get_type(self) -> TaskType:
         return TaskType.UPDATE_COLLECTION
@@ -45,6 +46,7 @@ class RunScanAndIndexingTask(PhotoCabinetTask):
     def execute(self):
         self.thumbnail_generation_enabled = get_app_data_val(self.task_transaction, AppDataField.THUMBNAIL_GENERATION)
         self.thumbnail_size = get_app_data_val(self.task_transaction, AppDataField.THUMBNAIL_SIZE_PX)
+        self.thumbnail_quality = get_app_data_val(self.task_transaction, AppDataField.THUMBNAIL_QUALITY)
 
         self.current_folder: List[UUID] = []
         root = Path(app_config.get_configuration(pc_configuration.COLLECTION_PATH))
@@ -103,7 +105,7 @@ class RunScanAndIndexingTask(PhotoCabinetTask):
         root = Path(app_config.get_configuration(pc_configuration.COLLECTION_PATH))
         relative_path = photo_path.relative_to(root)
 
-        file_hash = self._calculate_file_hash(str(photo_path))
+        file_hash = image_facade.compute_pixel_sha256(str(photo_path))
         existing_photo = find_photo_by_path(self.task_transaction, str(relative_path))
 
         if existing_photo is None:
@@ -155,7 +157,7 @@ class RunScanAndIndexingTask(PhotoCabinetTask):
                 photo.metadata_index.photo_created_origin = create_date_result.metadata_id.get_key()
 
             if self.thumbnail_generation_enabled:
-                image_facade.generate_thumbnail(photo, self.thumbnail_size)
+                image_facade.generate_thumbnail(photo, self.thumbnail_size, self.thumbnail_quality)
 
             photo_size_tags = metadata_indexing_facade.search_photo_size_tags(self.task_transaction, photo)
             photo_size_result: PhotoSizeResult = metadata_indexing_facade.get_photo_size(photo, photo_size_tags)

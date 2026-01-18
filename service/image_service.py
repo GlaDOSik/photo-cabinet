@@ -1,6 +1,7 @@
+import hashlib
 import os
 
-from PIL import Image
+from PIL import Image, ImageOps
 # import numpy as np
 from collections import Counter
 
@@ -22,7 +23,7 @@ def get_image_size(photo_path: str) -> tuple[int, int]:
         return img.size  # Returns (width, height)
 
 
-def generate_thumbnail(photo_path: str, thumbnail_name: str, target_path: str, size: int) -> str:
+def generate_thumbnail(photo_path: str, thumbnail_name: str, target_path: str, size: int, quality=85) -> str:
     """Generate a thumbnail of a photo.
     
     Args:
@@ -57,7 +58,7 @@ def generate_thumbnail(photo_path: str, thumbnail_name: str, target_path: str, s
         img.thumbnail((size, size), Image.Resampling.LANCZOS)
         
         # Save thumbnail
-        img.save(thumbnail_path, "JPEG", quality=85, optimize=True)
+        img.save(thumbnail_path, "JPEG", quality=quality, optimize=True)
     
     return thumbnail_path
 
@@ -143,3 +144,20 @@ def get_dominant_color_quantize(photo_path: str, colors: int = 256) -> str:
         
         # Format as hex
         return f"#{r:02x}{g:02x}{b:02x}"
+
+def compute_pixel_sha256(path: str) -> str:
+    """
+    Returns SHA-256 of decoded image pixels.
+    Stable across metadata edits, unstable across pixel changes.
+    """
+    with Image.open(path) as img:
+        # 1) Normalize orientation (EXIF)
+        img = ImageOps.exif_transpose(img)
+
+        # 2) Normalize pixel format
+        img = img.convert("RGB")  # canonical
+
+        # 3) Hash raw pixel bytes
+        h = hashlib.sha256()
+        h.update(img.tobytes())
+        return h.hexdigest()

@@ -153,11 +153,13 @@ CREATE TABLE public.metadata_indexing_tag (
 CREATE TABLE public.photo (
 	id uuid NOT NULL,
 	folder_id uuid NOT NULL,
+	virtual_folder_id uuid NOT NULL,
 	file_path varchar NOT NULL,
 	file_hash varchar NOT NULL,
 	"name" varchar NOT NULL,
 	CONSTRAINT photo_pkey PRIMARY KEY (id),
-	CONSTRAINT photo_folder_id_fkey FOREIGN KEY (folder_id) REFERENCES public.folder(id) ON DELETE CASCADE
+	CONSTRAINT photo_folder_id_fkey FOREIGN KEY (folder_id) REFERENCES public.folder(id),
+	CONSTRAINT photo_virtual_folder_id_fkey FOREIGN KEY (virtual_folder_id) REFERENCES public.folder(id)
 );
 
 
@@ -175,6 +177,11 @@ CREATE TABLE public.photo_metadata (
 	effective_json jsonb NULL,
 	photo_created timestamp NULL,
 	photo_created_origin varchar NULL,
+	width int4 NULL,
+	height int4 NULL,
+	size_origin varchar NULL,
+	use_thumbnail bool NOT NULL,
+	preview_color_hex varchar NULL,
 	CONSTRAINT photo_metadata_pkey PRIMARY KEY (id),
 	CONSTRAINT photo_metadata_photo_id_fkey FOREIGN KEY (photo_id) REFERENCES public.photo(id) ON DELETE CASCADE
 );
@@ -195,12 +202,3 @@ CREATE TABLE public.task_log (
 	CONSTRAINT task_log_pkey PRIMARY KEY (id),
 	CONSTRAINT task_log_task_id_fkey FOREIGN KEY (task_id) REFERENCES public.task(id)
 );
-
-
--- Create default root folders
-INSERT INTO public.folder
-(id, parent_id, "name", folder_type)
-VALUES('1587573f-2748-4562-8ffe-4b96506302da'::uuid, NULL, 'ROOT', 'COLLECTION');
-INSERT INTO public.folder
-(id, parent_id, "name", folder_type)
-VALUES('177f99c4-84c8-4005-9103-ebde67fed9e4'::uuid, NULL, 'LIMBO', 'LIMBO');

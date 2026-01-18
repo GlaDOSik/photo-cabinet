@@ -39,6 +39,10 @@ class AppDataField(Enum):
     EXIFTOOL_VERSION = (auto(), str, None)
     THUMBNAIL_GENERATION = (auto(), bool, True)
     THUMBNAIL_SIZE_PX = (auto(), int, 150)
+    THUMBNAIL_QUALITY = (auto(), int, 85)
+    FOLDER_VIEW_FOLDERS_PAGINATION_COUNT = (auto(), int, 10)
+    FOLDER_VIEW_PHOTOS_PAGINATION_COUNT = (auto(), int, 20)
+    FOLDER_CONTENT_IDS_LIMIT = (auto(), int, 500)
 
     def __new__(cls, value, field_type, default_value):
         obj = object.__new__(cls)

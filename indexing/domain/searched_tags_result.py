@@ -7,7 +7,7 @@ from domain.metadata.metadata_id import MetadataId
 
 class SearchedTagsResult:
     def __init__(self):
-        self.searched_tags: [MetadataId] = []
+        self.searched_tags: List[MetadataId] = []
         # Store lists of values to handle multiple matches (e.g., from arrays)
         self.searched_values: Dict[str, List[Any]] = dict()
     

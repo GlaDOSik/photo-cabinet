@@ -1,7 +1,10 @@
 from uuid import UUID
 from flask import g, abort, send_file
 from flask_smorest import Blueprint
+
+import pc_configuration
 from dbe.photo import find_by_id as find_photo_by_id
+from vial.config import app_config
 
 content_api = Blueprint("content", __name__, url_prefix="/content")
 
@@ -22,4 +25,18 @@ def get_image(photo_id: str):
         abort(404)
     
     file_path = photo.get_photo_file_path()
+    return send_file(file_path)
+
+
+@content_api.route("/thumbnail/<photo_id>", methods=["GET"])
+@content_api.response(200)
+@content_api.alt_response(404)
+@content_api.alt_response(400)
+def get_thumbnail(photo_id: str):
+    try:
+        UUID(photo_id)
+    except ValueError:
+        abort(400)
+
+    file_path = app_config.get_configuration(pc_configuration.GENERATED_PATH) + "/" + photo_id + ".jpg"
     return send_file(file_path)

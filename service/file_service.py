@@ -1,16 +1,16 @@
 import uuid
-from typing import Tuple, List, Optional
+from typing import Tuple, List, Optional, Set
 from uuid import UUID
 
-from sqlalchemy import select, literal, desc, asc, nullslast
+from sqlalchemy import select, literal, desc, asc, nullslast, update
 from sqlalchemy.orm import Session, aliased
 
 from dbe.folder import Folder
 from dbe.photo import Photo
 from domain.folder_content import FolderContent
+from domain.folder_type import FolderType
 from domain.ordering_type import OrderingType
 from indexing.dbe.metadata_index import MetadataIndex
-
 
 
 def get_breadcrumb(session: Session, folder_id: uuid.UUID) -> List[Folder]:
@@ -73,3 +73,80 @@ def get_folder_contents(session: Session, folder_id: UUID, ordering_type: Option
         .order_by(photo_order)
     ).all()
     return FolderContent(child_folders, photos)
+
+
+def _find_all_virtual_descendant_folders(session: Session, folder_id: UUID) -> Set[UUID]:
+    """
+    Recursively find all virtual descendant folders starting from the given folder_id.
+    Returns a set of folder IDs including the root folder if it's virtual.
+    """
+    descendants = (
+        select(
+            Folder.id, Folder.parent_id, Folder.folder_type, literal(0).label("depth")
+        )
+        .where(Folder.id == folder_id)
+        .cte(name="descendants", recursive=True)
+    )
+    
+    child = aliased(Folder)
+    descendants = descendants.union_all(
+        select(child.id, child.parent_id, child.folder_type, descendants.c.depth + 1)
+        .join(child, child.parent_id == descendants.c.id)
+        .where(child.folder_type == FolderType.VIRTUAL)
+    )
+    
+    folder_ids = session.scalars(
+        select(descendants.c.id)
+        .where(descendants.c.folder_type == FolderType.VIRTUAL)
+    ).all()
+    
+    return set(folder_ids)
+
+
+def remove_selection(session: Session, folder_ids: List[UUID], photo_ids: List[UUID]):
+    """
+    Remove selection: unset virtual_folder_id for photos and remove virtual folders recursively.
+    
+    - Sets virtual_folder_id to None for all photo_ids
+    - For each folder_id that is VIRTUAL:
+      - Recursively finds all child virtual folders
+      - Unsets virtual_folder_id to None for all photos referencing these folders
+      - Removes the virtual folders
+    """
+    # First, unset virtual_folder_id for all photo_ids
+    if photo_ids:
+        session.execute(
+            update(Photo)
+            .where(Photo.id.in_(photo_ids))
+            .values(virtual_folder_id=None)
+        )
+    
+    # Process each folder_id
+    all_folder_ids_to_delete: Set[UUID] = set()
+    
+    for folder_id in folder_ids:
+        folder = session.query(Folder).filter_by(id=folder_id).first()
+        if folder is None:
+            continue
+        
+        if folder.folder_type != FolderType.VIRTUAL:
+            continue
+        
+        # Recursively find all virtual descendant folders
+        descendant_ids = _find_all_virtual_descendant_folders(session, folder_id)
+        all_folder_ids_to_delete.update(descendant_ids)
+    
+    # Unset virtual_folder_id for all photos referencing folders to be deleted
+    if all_folder_ids_to_delete:
+        session.execute(
+            update(Photo)
+            .where(Photo.virtual_folder_id.in_(all_folder_ids_to_delete))
+            .values(virtual_folder_id=None)
+        )
+    
+    # Delete all virtual folders
+    if all_folder_ids_to_delete:
+        # Delete in reverse depth order (children first) to avoid constraint issues
+        # Using CASCADE delete, but we need to ensure order
+        session.query(Folder).filter(Folder.id.in_(all_folder_ids_to_delete)).delete(synchronize_session=False)
+
