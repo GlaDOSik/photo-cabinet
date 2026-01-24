@@ -2,6 +2,8 @@ import json
 from datetime import datetime
 from typing import Dict, Any, List
 
+from glom import glom, PathAccessError, T
+
 from dbe.photo import Photo
 from domain.metadata.metadata_id import MetadataId
 from indexing.domain.created_date_result import CreatedDateResult
@@ -18,27 +20,33 @@ def get_photo_size(result: SearchedTagsResult) -> PhotoSizeResult:
     width_origin = None
     height = None
     height_origin = None
-    for found_metadata_id in result.searched_tags:
+    for requested_tag in result.requested_tags:
+        searched_value = result.get_value(requested_tag)
+        if searched_value.value is None:
+            continue
+        found_metadata_id = searched_value.searched_tag
+        if found_metadata_id is None:
+            continue
         if "width" in found_metadata_id.tag_name.lower():
-            width_raw = result.get_value(found_metadata_id)
             if width is None:
-                width = metadata_parsers.parse_int(width_raw)
+                width = metadata_parsers.parse_int(searched_value.value)
                 width_origin = found_metadata_id.get_key()
         if "height" in found_metadata_id.tag_name.lower():
-            height_raw = result.get_value(found_metadata_id)
             if height is None:
-                height = metadata_parsers.parse_int(height_raw)
+                height = metadata_parsers.parse_int(searched_value.value)
                 height_origin = found_metadata_id.get_key()
     return PhotoSizeResult(width, height, width_origin, height_origin)
 
 # returns one parsed created date from result
 def get_created_date(result: SearchedTagsResult) -> CreatedDateResult:
-    for found_metadata_id in result.searched_tags:
-        created_date_value = result.get_value(found_metadata_id)
-        if created_date_value is None:
-            # Probably found multiple values - not valid created date search
+    for requested_tag in result.requested_tags:
+        searched_value = result.get_value(requested_tag)
+        if searched_value.value is None:
             continue
-        parsed_date: datetime = metadata_parsers.parse_date(created_date_value, metadata_parsers.DATE_PATTERNS)
+        found_metadata_id = searched_value.searched_tag
+        if found_metadata_id is None:
+            continue
+        parsed_date: datetime = metadata_parsers.parse_date(searched_value.value, metadata_parsers.DATE_PATTERNS)
         if parsed_date is None:
             # Either wrong format or no date time (it could be TZ or time)
             continue
@@ -54,11 +62,11 @@ def get_created_date(result: SearchedTagsResult) -> CreatedDateResult:
                 return CreatedDateResult(parsed_date.replace(tzinfo=tz_info), found_metadata_id)
         # only date - need to enhance with time
         if found_metadata_id == metadata_defined.IPTC_DATE_CREATED:
-            time_dt_str = result.get_value(metadata_defined.IPTC_TIME_CREATED)
+            time_dt_value = result.get_value(metadata_defined.IPTC_TIME_CREATED)
             # Only IPTC date with no time - then try other metadata
-            if time_dt_str is None:
+            if time_dt_value.value is None:
                 continue
-            parsed_time = metadata_parsers.parse_time(time_dt_str)
+            parsed_time = metadata_parsers.parse_time(time_dt_value.value)
             if parsed_time is None:
                 continue
             return CreatedDateResult(datetime.combine(parsed_date.date(), parsed_time), found_metadata_id) # merge date and time
@@ -84,155 +92,56 @@ def search_tag_value(photo: Photo, matching_groups: List[MetadataIndexingGroup],
 
     return search_tag_value_by_tags(photo, metadata_set)
 
-def _search_tag_recursive_all(data: Any, tag_name: str, results: List[Any]):
-    """
-    Recursively search for a tag name in nested dict or array structures.
-    Collects all matching values into the results list.
-    
-    If the tag_name is found as a direct key in a dict, adds that value.
-    Also recursively searches through all nested dicts and arrays.
-    """
-    if data is None:
-        return
-    
-    # If it's a dict, check if tag_name is a direct key first
-    if isinstance(data, dict):
-        # Direct key match - add to results
-        if tag_name in data:
-            results.append(data[tag_name])
-        
-        # Also recurse into all values to find nested matches
-        for value in data.values():
-            _search_tag_recursive_all(value, tag_name, results)
-    
-    # If it's a list/array, recurse into each item
-    elif isinstance(data, list):
-        for item in data:
-            _search_tag_recursive_all(item, tag_name, results)
-
-def _find_path_structures_recursive(data: Any, path_name: str, results: List[Any]):
-    """
-    Recursively find all structures with the given path name.
-    Used for single-level paths (e.g., "Look").
-    Collects all matching path structures into results list.
-    """
-    if data is None:
-        return
-    
-    if isinstance(data, dict):
-        # Check if path exists as a direct key
-        if path_name in data:
-            path_data = data[path_name]
-            results.append(path_data)
-        
-        # Recurse into all values to find nested path structures
-        for value in data.values():
-            _find_path_structures_recursive(value, path_name, results)
-    
-    elif isinstance(data, list):
-        # For arrays, recurse into each item
-        for item in data:
-            _find_path_structures_recursive(item, path_name, results)
-
-def _navigate_path(data: Any, path_parts: List[str], results: List[Any]):
-    """
-    Navigate through nested structures following the path parts exactly.
-    Supports nested paths (e.g., "Look.Parameters").
-    First recursively finds structures matching the first part, then navigates through remaining parts.
-    Collects all matching structures at the end of the path into results.
-    """
-    if data is None or len(path_parts) == 0:
-        return
-    
-    if len(path_parts) == 1:
-        # Single path part - use recursive search to find all matching structures
-        _find_path_structures_recursive(data, path_parts[0], results)
-        return
-    
-    # Multiple path parts - first find all structures matching the first part
-    first_part = path_parts[0]
-    remaining_parts = path_parts[1:]
-    first_level_structures: List[Any] = []
-    _find_path_structures_recursive(data, first_part, first_level_structures)
-    
-    # Then navigate through remaining parts for each found structure
-    for structure in first_level_structures:
-        if structure is None:
-            continue
-        
-        if isinstance(structure, list):
-            # For arrays, navigate into each item
-            for item in structure:
-                _navigate_path(item, remaining_parts, results)
-        else:
-            _navigate_path(structure, remaining_parts, results)
-
-def _search_in_structure(data: Any, tag_name: str, path: str | None) -> List[Any]:
-    """
-    Search for tag_name in data structure, optionally within a specific path.
-    
-    Path can be a single level (e.g., "Look") or nested (e.g., "Look.Parameters").
-    If path is provided, navigate to that structure first, then search for tag_name within it.
-    Returns a list of all matching values (can be empty, single, or multiple).
-    """
-    results: List[Any] = []
-    
-    # If path is specified, navigate to the path structure first, then search within it
-    if path is not None:
-        # Split path by dots to support nested paths (e.g., "Look.Parameters")
-        path_parts = path.split('.')
-        path_structures: List[Any] = []
-        _navigate_path(data, path_parts, path_structures)
-        
-        # Search for tag_name within each found path structure
-        for path_structure in path_structures:
-            _search_tag_recursive_all(path_structure, tag_name, results)
-    else:
-        # No path specified - search directly in the structure
-        _search_tag_recursive_all(data, tag_name, results)
-    
-    return results
-
-def search_tag_value_by_tags(photo: Photo, searched_tags: [MetadataId]) -> SearchedTagsResult:
+## Not exact search of index
+## If g1 is not defined, it first searches in tags, then in all g1 groups
+def search_tag_value_by_tags(photo: Photo, requested_tags: [MetadataId]) -> SearchedTagsResult:
     result = SearchedTagsResult()
     if photo.metadata_index is None:
         return result
     
-    for metadata_id in searched_tags:
-        g0 = photo.metadata_index.exif_json.get(metadata_id.group_0)
-        if g0 is None:
-            continue
-        
-        found_values: List[Any] = []
-        
-        # If g1 is defined, search only in that specific g1 section
-        if metadata_id.group_1 is not None:
-            g1 = g0.get("g1")
-            if g1 is not None:
-                g1_tags = g1.get(metadata_id.group_1)
-                if g1_tags is not None:
-                    found_values = _search_in_structure(g1_tags, metadata_id.tag_name, metadata_id.path)
-        else:
-            # No g1 defined - search in tags first, then in all g1 sections
-            tags = g0.get("tags")
-            if tags is not None:
-                found_values = _search_in_structure(tags, metadata_id.tag_name, metadata_id.path)
-            
-            # If not found in tags, search in all g1 sections
-            if len(found_values) == 0:
-                g1 = g0.get("g1")
-                if g1 is not None:
-                    for g1_tags in g1.values():
-                        found_values = _search_in_structure(g1_tags, metadata_id.tag_name, metadata_id.path)
-                        if len(found_values) > 0:
-                            break
-        
-        # If we found values, add them to the result
-        if len(found_values) > 0:
-            result.searched_tags.append(metadata_id)
-            result.searched_values[metadata_id.get_key()] = found_values
-    
+    for requested_tag in requested_tags:
+        try:
+            # First try: search in tags (if g1 is None) or exact g1 path
+            value = search_index_value(photo.metadata_index.exif_json, requested_tag)
+            result.add_result(requested_tag, requested_tag, value)
+        except PathAccessError:
+            # If g1 is not defined and tags search failed, try searching in all g1 keys
+            if requested_tag.group_1 is None:
+                g1_results = _search_in_all_g1(photo.metadata_index.exif_json, requested_tag)
+                for g1_result in g1_results:
+                    result.add_result(requested_tag, g1_result[0], g1_result[1])
     return result
+
+def _search_in_all_g1(index_data: Dict, metadata_id: MetadataId) -> List:
+    """
+    Search for tag value across all g1 keys when g1 is not specified.
+    Returns the first found value, or None if not found in any g1.
+    """
+    results = []
+    try:
+        # Get all g1 keys for the given g0 (e.g., ['IFD0', 'ExifIFD'] for 'EXIF')
+        g1_keys = glom(index_data, (f'{metadata_id.group_0}.g1', T.keys()), default=[])
+        
+        # Try each g1 key until we find a value
+        for g1_key in g1_keys:
+            try:
+                # Create a new MetadataId with this g1 key and search
+                g1_metadata_id = MetadataId(
+                    metadata_id.group_0,
+                    g1_key,
+                    metadata_id.tag_name,
+                    path=metadata_id.path
+                )
+                result_value = search_index_value(index_data, g1_metadata_id)
+                results.append([g1_metadata_id, result_value])
+            except PathAccessError:
+                # Continue to next g1 key
+                continue
+    except PathAccessError:
+        # No g1 structure exists for this g0
+        pass
+    
+    return results
 
 def get_metadata_index_from_file(photo_path: str, filtering_groups: List[MetadataIndexingGroup]) -> Dict[str, Any]:
     # Create ExiftoolCommand with base options
@@ -335,3 +244,12 @@ def _get_closest_match(matched_groups: [MetadataIndexingGroup]) -> MetadataIndex
         return matched_groups[0]
 
     return selected_group
+
+## Exact search in index
+## If g1 is not filled, searches only g0
+## If path is not filled, it searches only the root tag
+def search_index_value(index_data: Dict, metadata_id: MetadataId):
+    g1_part = "tags" if metadata_id.group_1 is None else f"g1.{metadata_id.group_1}"
+    path_part = "" if metadata_id.path is None else f"{metadata_id.path}."
+    glom_req = f"{metadata_id.group_0}.{g1_part}.{path_part}{metadata_id.tag_name}"
+    return glom(index_data, glom_req)

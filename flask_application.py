@@ -7,6 +7,7 @@ from blueprint.api import api_blueprint
 from blueprint.api.content.content_api import content_api
 from blueprint.api.config.config_api import config_api
 from blueprint.api.folder.folder_api import folder_api
+from blueprint.api.metadata.metadata_api import metadata_api
 from blueprint.api.settings.indexing.indexing_api import indexing_api
 from blueprint.api.task.task_api import task_api
 from blueprint.api.settings.settings_api import settings_api
@@ -67,5 +68,6 @@ def register_blueprints(app: Flask):
     api_blueprint.register_blueprint(folder_api)
     api_blueprint.register_blueprint(content_api)
     api_blueprint.register_blueprint(config_api)
+    api_blueprint.register_blueprint(metadata_api)
 
     api.register_blueprint(api_blueprint)

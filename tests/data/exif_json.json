@@ -1,0 +1,62 @@
+{
+  "EXIF": {
+    "g1": {
+      "GPS": {
+        "GPSVersionID": "2.3.0.0"
+      },
+      "IFD0": {
+        "Make": "OLYMPUS CORPORATION",
+        "Model": "E-PL8",
+        "Artist": "",
+        "Software": "Version 1.1",
+        "Copyright": ""
+      },
+      "IFD1": {
+        "Compression": "JPEG (old-style)",
+        "XResolution": 72,
+        "YResolution": 72,
+        "ResolutionUnit": "inches",
+        "ThumbnailImage": "(Binary data 9374 bytes, use -b option to extract)",
+        "ThumbnailLength": 9374,
+        "ThumbnailOffset": 16864
+      },
+      "ExifIFD": {
+        "ISO": 200,
+        "Flash": "Auto, Did not fire",
+        "FNumber": 8.0,
+        "Contrast": "Normal",
+        "MeteringMode": "Multi-segment",
+        "WhiteBalance": "Auto",
+        "CustomRendered": "Normal",
+        "ExifImageWidth": 4608,
+        "ExifImageHeight": 3456
+      }
+    }
+  },
+  "File": {
+    "g1": {
+      "System": {
+        "FileName": "P8020209.JPG",
+        "FileSize": "3.0 MB",
+        "Directory": "/home/ludek/ProjectData/PhotoCabinet/collection/2019/Pernštejn",
+        "FileAccessDate": "2026:01:11 00:24:36+01:00"
+      }
+    },
+    "tags": {
+      "FileType": "JPEG",
+      "MIMEType": "image/jpeg",
+      "ImageWidth": 4608,
+      "ImageHeight": 3456,
+      "BitsPerSample": 8,
+      "ExifByteOrder": "Little-endian (Intel, II)"
+    }
+  },
+  "XMP": {
+    "tags": {
+      "TestArray": [
+      {"TagInArray": "Value1"},
+      {"SomeTag": "Value2"}
+      ]
+    }
+  }
+}

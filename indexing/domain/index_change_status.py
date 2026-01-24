@@ -1,0 +1,8 @@
+from enum import Enum
+
+
+class IndexChangeStatus(Enum):
+    APPLIED = "APPLIED"
+    NOT_APPLIED = "NOT_APPLIED"
+    NOT_APPLIED_DIFF_VALUE = "NOT_APPLIED_DIFF_VALUE"
+    INCORRECT_TAG_PATH = "INCORRECT_TAG_PATH"

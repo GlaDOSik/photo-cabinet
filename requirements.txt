@@ -8,3 +8,4 @@ flask-cors==6.0.1
 requests==2.32.5
 beautifulsoup4==4.14.2
 pillow==11.1.0
+glom==25.12.0

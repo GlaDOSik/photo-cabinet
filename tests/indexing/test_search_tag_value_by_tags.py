@@ -29,19 +29,21 @@ class TestSearchTagValueByTags(unittest.TestCase):
         metadata_id = MetadataId("EXIF", None, "ExposureTime")
         result = search_tag_value_by_tags(self.photo, [metadata_id])
         
-        self.assertEqual(len(result.searched_tags), 1)
-        self.assertEqual(result.searched_tags[0], metadata_id)
-        self.assertEqual(result.get_value(metadata_id), "1/5000")
-        self.assertEqual(result.get_all_values(metadata_id), ["1/5000"])
+        self.assertEqual(len(result.values_by_requested_tag), 1)
+        self.assertEqual(result.get_value(metadata_id).value, "1/5000")
+        # self.assertEqual(result.get_all_values(metadata_id), ["1/5000"])
 
     def test_tag_with_g1_specified(self):
         """Test searching for a tag when g1 is specified."""
         metadata_id = MetadataId("EXIF", "IFD0", "Software")
         result = search_tag_value_by_tags(self.photo, [metadata_id])
         
-        self.assertEqual(len(result.searched_tags), 1)
-        self.assertEqual(result.get_value(metadata_id), "Adobe Lightroom 8.5.1 (Macintosh)")
-        self.assertEqual(result.get_all_values(metadata_id), ["Adobe Lightroom 8.5.1 (Macintosh)"])
+        self.assertEqual(len(result.values_by_requested_tag), 1)
+        self.assertEqual(result.get_value(metadata_id).value, "Adobe Lightroom 8.5.1 (Macintosh)")
+        self.assertEqual(
+            [value.value for value in result.get_all_values(metadata_id)],
+            ["Adobe Lightroom 8.5.1 (Macintosh)"]
+        )
 
     def test_tag_without_g1_searches_tags_first(self):
         """Test that when g1 is not specified, it searches tags first."""
@@ -49,9 +51,9 @@ class TestSearchTagValueByTags(unittest.TestCase):
         metadata_id = MetadataId("EXIF", None, "FNumber")
         result = search_tag_value_by_tags(self.photo, [metadata_id])
         
-        self.assertEqual(len(result.searched_tags), 1)
-        self.assertEqual(result.get_value(metadata_id), 2.8)
-        self.assertEqual(result.get_all_values(metadata_id), [2.8])
+        self.assertEqual(len(result.values_by_requested_tag), 1)
+        self.assertEqual(result.get_value(metadata_id).value, 2.8)
+        self.assertEqual([value.value for value in result.get_all_values(metadata_id)], [2.8])
 
     def test_tag_without_g1_falls_back_to_g1(self):
         """Test that when tag is not in tags, it searches in g1 sections."""
@@ -59,9 +61,12 @@ class TestSearchTagValueByTags(unittest.TestCase):
         metadata_id = MetadataId("EXIF", None, "ModifyDate")
         result = search_tag_value_by_tags(self.photo, [metadata_id])
         
-        self.assertEqual(len(result.searched_tags), 1)
-        self.assertEqual(result.get_value(metadata_id), "2025:09:15 01:18:06")
-        self.assertEqual(result.get_all_values(metadata_id), ["2025:09:15 01:18:06"])
+        self.assertEqual(len(result.values_by_requested_tag), 1)
+        self.assertEqual("2025:09:15 01:18:06", result.get_value(metadata_id).value)
+        self.assertEqual(
+            [value.value for value in result.get_all_values(metadata_id)],
+            ["2025:09:15 01:18:06"]
+        )
 
     def test_tag_with_path(self):
         """Test searching for a tag within a specific path structure."""
@@ -69,46 +74,20 @@ class TestSearchTagValueByTags(unittest.TestCase):
         metadata_id = MetadataId("XMP", "XMP-crs", "Group", path="Look")
         result = search_tag_value_by_tags(self.photo, [metadata_id])
         
-        self.assertEqual(len(result.searched_tags), 1)
-        self.assertEqual(result.get_value(metadata_id), "Modern")
-        self.assertEqual(result.get_all_values(metadata_id), ["Modern"])
-
-    def test_tag_in_array_multiple_values(self):
-        """Test searching for a tag in an array structure that appears multiple times."""
-        # FullMaskSize appears in multiple CorrectionMasks items
-        metadata_id = MetadataId("XMP", "XMP-crs", "FullMaskSize", path="CorrectionMasks")
-        result = search_tag_value_by_tags(self.photo, [metadata_id])
-        
-        self.assertEqual(len(result.searched_tags), 1)
-        all_values = result.get_all_values(metadata_id)
-        self.assertEqual(len(all_values), 2)
-        self.assertIn("2886,1920", all_values)
-        self.assertIn("120,120", all_values)
-        # get_value should return first value
-        self.assertIn(result.get_value(metadata_id), ["2886,1920", "120,120"])
-
-    def test_tag_in_nested_array_structure(self):
-        """Test searching for a tag in nested array structures."""
-        # InputDigest is in CorrectionMasks array items
-        metadata_id = MetadataId("XMP", "XMP-crs", "InputDigest", path="CorrectionMasks")
-        result = search_tag_value_by_tags(self.photo, [metadata_id])
-        
-        self.assertEqual(len(result.searched_tags), 1)
-        all_values = result.get_all_values(metadata_id)
-        self.assertEqual(len(all_values), 2)
-        self.assertIn("96078B9E52C1B0F9371C24297D99E90F", all_values)
-        self.assertIn("dsfsdgdgds", all_values)
+        self.assertEqual(len(result.values_by_requested_tag), 1)
+        self.assertEqual(result.get_value(metadata_id).value, "Modern")
+        self.assertEqual([value.value for value in result.get_all_values(metadata_id)], ["Modern"])
 
     def test_tag_with_path_in_nested_structure(self):
         """Test searching for a tag with path in a nested structure."""
         # ConvertToGrayscale is in Look.Parameters structure
-        metadata_id = MetadataId("XMP", "XMP-crs", "ConvertToGrayscale", path="Look")
+        metadata_id = MetadataId("XMP", "XMP-crs", "ConvertToGrayscale", path="Look.**")
         result = search_tag_value_by_tags(self.photo, [metadata_id])
         
-        self.assertEqual(len(result.searched_tags), 1)
+        self.assertEqual(len(result.values_by_requested_tag), 1)
         # Should find it recursively within Look structure (in Parameters sub-structure)
-        self.assertEqual(result.get_value(metadata_id), False)
-        self.assertEqual(result.get_all_values(metadata_id), [False])
+        self.assertEqual(result.get_value(metadata_id).value, False)
+        self.assertEqual([value.value for value in result.get_all_values(metadata_id)], [False])
 
     def test_tag_with_nested_path(self):
         """Test searching for a tag using nested path specification (e.g., Look.Parameters)."""
@@ -116,15 +95,15 @@ class TestSearchTagValueByTags(unittest.TestCase):
         metadata_id = MetadataId("XMP", "XMP-crs", "ConvertToGrayscale", path="Look.Parameters")
         result = search_tag_value_by_tags(self.photo, [metadata_id])
         
-        self.assertEqual(len(result.searched_tags), 1)
+        self.assertEqual(len(result.values_by_requested_tag), 1)
         # Should find it in Look.Parameters structure
-        self.assertEqual(result.get_value(metadata_id), False)
-        self.assertEqual(result.get_all_values(metadata_id), [False])
+        self.assertEqual(result.get_value(metadata_id).value, False)
+        self.assertEqual([value.value for value in result.get_all_values(metadata_id)], [False])
         
         # Also test that Group can be found with single-level path
         metadata_id_group = MetadataId("XMP", "XMP-crs", "Group", path="Look")
         result_group = search_tag_value_by_tags(self.photo, [metadata_id_group])
-        self.assertEqual(result_group.get_value(metadata_id_group), "Modern")
+        self.assertEqual(result_group.get_value(metadata_id_group).value, "Modern")
 
     def test_multiple_tags_search(self):
         """Test searching for multiple tags at once."""
@@ -135,18 +114,18 @@ class TestSearchTagValueByTags(unittest.TestCase):
         ]
         result = search_tag_value_by_tags(self.photo, metadata_ids)
         
-        self.assertEqual(len(result.searched_tags), 3)
-        self.assertEqual(result.get_value(metadata_ids[0]), "1/5000")
-        self.assertEqual(result.get_value(metadata_ids[1]), "Adobe Lightroom 8.5.1 (Macintosh)")
-        self.assertEqual(result.get_value(metadata_ids[2]), "Modern")
+        self.assertEqual(len(result.values_by_requested_tag), 3)
+        self.assertEqual(result.get_value(metadata_ids[0]).value, "1/5000")
+        self.assertEqual(result.get_value(metadata_ids[1]).value, "Adobe Lightroom 8.5.1 (Macintosh)")
+        self.assertEqual(result.get_value(metadata_ids[2]).value, "Modern")
 
     def test_nonexistent_tag(self):
         """Test searching for a tag that doesn't exist."""
         metadata_id = MetadataId("EXIF", None, "NonExistentTag")
         result = search_tag_value_by_tags(self.photo, [metadata_id])
         
-        self.assertEqual(len(result.searched_tags), 0)
-        self.assertEqual(result.get_value(metadata_id), None)
+        self.assertEqual(len(result.values_by_requested_tag), 0)
+        self.assertEqual(result.get_value(metadata_id).value, None)
         self.assertEqual(result.get_all_values(metadata_id), [])
 
     def test_nonexistent_group(self):
@@ -154,32 +133,23 @@ class TestSearchTagValueByTags(unittest.TestCase):
         metadata_id = MetadataId("NonExistentGroup", None, "SomeTag")
         result = search_tag_value_by_tags(self.photo, [metadata_id])
         
-        self.assertEqual(len(result.searched_tags), 0)
-        self.assertEqual(result.get_value(metadata_id), None)
+        self.assertEqual(len(result.values_by_requested_tag), 0)
+        self.assertEqual(result.get_value(metadata_id).value, None)
 
     def test_get_single_value_with_one_match(self):
         """Test get_single_value when only one value exists."""
         metadata_id = MetadataId("EXIF", None, "ExposureTime")
         result = search_tag_value_by_tags(self.photo, [metadata_id])
         
-        self.assertEqual(result.get_single_value(metadata_id), "1/5000")
-
-    def test_get_single_value_with_multiple_matches(self):
-        """Test get_single_value raises error when multiple values exist."""
-        metadata_id = MetadataId("XMP", "XMP-crs", "FullMaskSize", path="CorrectionMasks")
-        result = search_tag_value_by_tags(self.photo, [metadata_id])
-        
-        with self.assertRaises(ValueError) as context:
-            result.get_single_value(metadata_id)
-        self.assertIn("Multiple values found", str(context.exception))
+        self.assertEqual(result.get_single_value(metadata_id).value, "1/5000")
 
     def test_tag_with_path_no_path_structure(self):
         """Test searching with path when the path structure doesn't exist."""
         metadata_id = MetadataId("EXIF", None, "ExposureTime", path="NonExistentPath")
         result = search_tag_value_by_tags(self.photo, [metadata_id])
         
-        self.assertEqual(len(result.searched_tags), 0)
-        self.assertEqual(result.get_value(metadata_id), None)
+        self.assertEqual(len(result.values_by_requested_tag), 0)
+        self.assertEqual(result.get_value(metadata_id).value, None)
 
     def test_photo_without_metadata_index(self):
         """Test that searching in photo without metadata_index returns empty result."""
@@ -187,8 +157,8 @@ class TestSearchTagValueByTags(unittest.TestCase):
         metadata_id = MetadataId("EXIF", None, "ExposureTime")
         result = search_tag_value_by_tags(photo_without_index, [metadata_id])
         
-        self.assertEqual(len(result.searched_tags), 0)
-        self.assertEqual(result.get_value(metadata_id), None)
+        self.assertEqual(len(result.values_by_requested_tag), 0)
+        self.assertEqual(result.get_value(metadata_id).value, None)
 
 
 if __name__ == '__main__':

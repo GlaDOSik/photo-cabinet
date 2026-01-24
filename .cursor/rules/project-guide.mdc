@@ -6,3 +6,5 @@ alwaysApply: true
 - repository methods (find_by_id,...) are in scripts with dbe objects
 - prefer service scripts with plain methods than long lived singletons
 - in request scope, get Session obj from g var: transaction_session = getattr(g, "transaction_session", None)
+- when creating api, use 3 scripts - something_api.py (flask smorest annotated endpoints), something_requests.py (request objects using marshmallow Schema) and something_responses.py (Schema, static to_resp method that takes domain or dbe object and maps it to simple dict accoding to schema)
+- register blueprints in flask_application.py
