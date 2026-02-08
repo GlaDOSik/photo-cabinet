@@ -8,3 +8,6 @@ class CreatedDateResult:
     def __init__(self, created_date: Optional[datetime], metadata_id: Optional[MetadataId]):
         self.created_date: Optional[datetime] = created_date
         self.metadata_id: Optional[MetadataId] = metadata_id
+
+    def has_result(self):
+        return self.created_date is not None

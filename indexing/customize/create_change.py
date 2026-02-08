@@ -4,9 +4,9 @@ from glom import glom, PathAccessError
 
 from domain.metadata.metadata_id import MetadataId
 from indexing.customize.index_change import IndexChange
-from indexing.domain.index_change_status import IndexChangeStatus
+from indexing.domain.index_change_status import IndexChangeValidationStatus
 from indexing.domain.index_change_type import IndexChangeType
-from indexing import metadata_indexing_service
+from indexing.metadata_indexing_repository import search_index_value, set_index_value
 
 
 class CreateChange(IndexChange):
@@ -14,17 +14,17 @@ class CreateChange(IndexChange):
         super().__init__(IndexChangeType.CREATE, metadata_id)
         self.value = value
 
-    def execute_on_index(self, exif_json: Dict):
-        pass
+    def execute_on_index(self, effective_json: Dict):
+        set_index_value(effective_json, self.metadata_id, self.value)
 
-    def check_status(self, exif_json: Dict) -> IndexChangeStatus:
+    def validate(self, exif_json: Dict) -> IndexChangeValidationStatus:
         try:
-            result = metadata_indexing_service.search_index_value(exif_json, self.metadata_id)
+            result = search_index_value(exif_json, self.metadata_id)
         except PathAccessError as ex:
-            return IndexChangeStatus.NOT_APPLIED
+            return IndexChangeValidationStatus.NOT_CREATED
         if result == self.value:
-            return IndexChangeStatus.APPLIED
-        return IndexChangeStatus.NOT_APPLIED_DIFF_VALUE
+            return IndexChangeValidationStatus.CREATED
+        return IndexChangeValidationStatus.EXISTS_DIFF_VALUE
 
     def to_dict(self) -> Dict:
         base_dict = self.base_to_dict()

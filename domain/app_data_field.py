@@ -37,12 +37,17 @@ def parse_to(type, s: str):
 
 class AppDataField(Enum):
     EXIFTOOL_VERSION = (auto(), str, None)
+    # Should thumbnails for photos be generated? If not, use full images as preview. May be slow
     THUMBNAIL_GENERATION = (auto(), bool, True)
+    # Largest size of generated thumbnail
     THUMBNAIL_SIZE_PX = (auto(), int, 150)
     THUMBNAIL_QUALITY = (auto(), int, 85)
     FOLDER_VIEW_FOLDERS_PAGINATION_COUNT = (auto(), int, 10)
     FOLDER_VIEW_PHOTOS_PAGINATION_COUNT = (auto(), int, 20)
     FOLDER_CONTENT_IDS_LIMIT = (auto(), int, 500)
+    FILE_METADATA_CACHE_VALIDITY_SEC = (auto(), int, 120)
+    # Trigger if the metadata definitions and docs should be re-loaded again during initialization of the app
+    LOAD_METADATA_DOCS = (auto(), bool, True)
 
     def __new__(cls, value, field_type, default_value):
         obj = object.__new__(cls)

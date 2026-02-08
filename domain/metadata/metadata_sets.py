@@ -1,4 +1,6 @@
 from domain.metadata import metadata_defined
+from domain.metadata.metadata_group_0 import MetadataGroup0
+from domain.metadata.metadata_id import MetadataId
 
 CREATE_DATE_SET = [metadata_defined.EXIF_DATE_TIME_ORIGINAL, # Date, time
                    metadata_defined.EXIF_OFFSET_TIME_ORIG, # TZ for ^
@@ -14,3 +16,5 @@ PHOTO_SIZE_SET = [metadata_defined.FILE_WIDTH,
               metadata_defined.EXIF_WIDTH,
               metadata_defined.EXIF_HEIGHT]
 
+METADATA_UI_VIEW_ORDER = [metadata_defined.G0_FILE,
+                          metadata_defined.G0_EXIF]

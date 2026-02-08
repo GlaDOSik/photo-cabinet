@@ -147,28 +147,14 @@ class RunScanAndIndexingTask(PhotoCabinetTask):
     def _save_metadata(self, photo: Photo):
         """Extract and save EXIF metadata for a photo."""
         try:
-            metadata_indexing_facade.create_update_metadata_index(self.task_transaction, photo)
-            self.task_transaction.flush()
-
-            created_date_tags = metadata_indexing_facade.search_created_date_tags(self.task_transaction, photo)
-            create_date_result = metadata_indexing_facade.get_created_date(created_date_tags)
-            if create_date_result.metadata_id is not None:
-                photo.metadata_index.photo_created = create_date_result.created_date
-                photo.metadata_index.photo_created_origin = create_date_result.metadata_id.get_key()
+            metadata_indexing_facade.update_metadata_index(self.task_transaction, photo)
 
             if self.thumbnail_generation_enabled:
                 image_facade.generate_thumbnail(photo, self.thumbnail_size, self.thumbnail_quality)
-
-            photo_size_tags = metadata_indexing_facade.search_photo_size_tags(self.task_transaction, photo)
-            photo_size_result: PhotoSizeResult = metadata_indexing_facade.get_photo_size(photo, photo_size_tags)
-            photo.metadata_index.width = photo_size_result.width
-            photo.metadata_index.height = photo_size_result.height
-            photo.metadata_index.size_origin = f"Width: {photo_size_result.width_origin}, Height: {photo_size_result.height_origin}"
-
             photo.metadata_index.preview_color_hex = image_facade.get_dominant_color_quantize(photo)
             
         except Exception as e:
-            self.log_message(f"Error extracting metadata for {photo.name}: {str(e)}", severity=TaskLogSeverity.WARNING)
+            self.log_message(f"Error extracting metadata for {photo.name}: {str(e)}", severity=TaskLogSeverity.ERROR)
 
     def _cleanup_missing_data(self, root_path: Path):
         """Move photos and folders that no longer exist on disk to limbo."""

@@ -4,10 +4,12 @@ from flask_smorest import Blueprint
 from dbe.photo import find_by_id as find_photo_by_id
 from blueprint.api.metadata.metadata_responses import PhotoMetadataIndex
 from blueprint.api.metadata.metadata_requests import GetPhotoMetadataRequest
+from domain.metadata.metadata_sets import METADATA_UI_VIEW_ORDER
 from domain.metadata_index_type import MetadataIndexType
+from indexing import metadata_indexing_repository
 
 
-metadata_api = Blueprint("metadata", __name__, url_prefix="/metadata")
+metadata_api = Blueprint("metadata", __name__, url_prefix="/index")
 
 
 @metadata_api.route("/photo", methods=["POST"])
@@ -38,5 +40,6 @@ def get_photo_metadata(request: dict):
             metadata_json = photo.metadata_index.exif_json
     else:
         abort(400)
-    
-    return PhotoMetadataIndex.to_resp(metadata_json)
+
+    # TODO Implement custom ordering
+    return PhotoMetadataIndex.to_resp(metadata_indexing_repository.index_to_ui_view(metadata_json, METADATA_UI_VIEW_ORDER))

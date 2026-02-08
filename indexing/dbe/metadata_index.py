@@ -1,9 +1,8 @@
-import uuid
 from datetime import datetime
 from typing import Optional, List
-from uuid import UUID
+from uuid import UUID, uuid4
 
-from sqlalchemy import ForeignKey, UniqueConstraint
+from sqlalchemy import ForeignKey
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, Session
 
@@ -13,7 +12,7 @@ from database import Base
 class MetadataIndex(Base):
     __tablename__ = "photo_metadata"
     
-    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     photo_id: Mapped[UUID] = mapped_column(
         ForeignKey("photo.id", ondelete="CASCADE")
     )

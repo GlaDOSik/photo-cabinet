@@ -1,9 +1,47 @@
-from typing import Dict
+from typing import Dict, List
 from uuid import UUID
 
-from marshmallow import Schema, fields, validate
+from marshmallow import Schema, fields, validate, validates
 
+from domain.metadata.metadata_id import MetadataId, PathStruct, PathArray
 from domain.metadata_index_type import MetadataIndexType
+
+class MetadataIdRequest(Schema):
+    ui_view_tag_path = fields.List(fields.Raw())  # str or int per element
+    tag_value = fields.Str()
+
+    @validates("ui_view_tag_path")
+    def validate_ui_view_tag_path(self, value):
+        for item in value:
+            if not isinstance(item, (str, int)):
+                raise validate.ValidationError(
+                    "Each element must be string or int"
+                )
+
+    @staticmethod
+    def get_metadata_id(request: Dict) -> MetadataId:
+        tag_path = request.get("ui_view_tag_path")
+        g0 = None
+        g1 = None
+        path: List[PathStruct | PathArray] = []
+        for i, tag_path_part in enumerate(tag_path):
+            if i == 0:
+                g0 = tag_path_part
+            elif i == 1:
+                g1 = None if tag_path_part == "-" else tag_path_part
+            elif i < len(tag_path) - 1:  # path parts only (exclude last = tag_name)
+                if isinstance(tag_path_part, int):
+                    array_name = path[-1].struct_name
+                    path.pop()
+                    path.append(PathArray(array_name, tag_path_part))
+                else:
+                    path.append(PathStruct(tag_path_part))
+        tag_name = tag_path[len(tag_path) - 1]
+        return MetadataId(g0, g1, tag_name, path)
+
+    @staticmethod
+    def get_tag_value(request: Dict):
+        return request.get("tag_value")
 
 
 class GetPhotoMetadataRequest(Schema):

@@ -17,6 +17,13 @@ class SearchedTagsResult:
         self.values_by_searched_tag: Dict[str, List[SearchedValue]] = dict()
 
     def add_result(self, requested_tag: MetadataId, searched_tag: MetadataId, value):
+        """
+        Add search result
+        :param requested_tag: Original requested search (can be without specific g1)
+        :param searched_tag: Where the tag was exactly found (can contain g1)
+        :param value:
+        :return:
+        """
         if isinstance(value, list):
             for result_value in value:
                 self._add_result(requested_tag, searched_tag, result_value)

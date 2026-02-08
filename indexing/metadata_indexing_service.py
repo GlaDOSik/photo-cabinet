@@ -2,10 +2,14 @@ import json
 from datetime import datetime
 from typing import Dict, Any, List
 
-from glom import glom, PathAccessError, T
+from glom import glom, PathAccessError, T, Match, assign
+from glom.matching import Optional
+
+import copy
 
 from dbe.photo import Photo
-from domain.metadata.metadata_id import MetadataId
+from domain.metadata.metadata_id import MetadataId, parse_path
+from indexing.dbe.file_metadata_cache import FileMetadataCache
 from indexing.domain.created_date_result import CreatedDateResult
 from indexing.domain.filter_type import FilterType
 from indexing.dbe.metadata_indexing_group import MetadataIndexingGroup
@@ -14,6 +18,7 @@ from exiftool.exiftool_command import ExiftoolCommand, EXIFTOOL_JSON_OPT, EXIFTO
 from indexing.domain.photo_size_result import PhotoSizeResult
 from indexing.domain.searched_tags_result import SearchedTagsResult
 from domain.metadata import metadata_parsers, metadata_defined
+from indexing.metadata_indexing_repository import search_index_value
 
 def get_photo_size(result: SearchedTagsResult) -> PhotoSizeResult:
     width = None
@@ -44,8 +49,6 @@ def get_created_date(result: SearchedTagsResult) -> CreatedDateResult:
         if searched_value.value is None:
             continue
         found_metadata_id = searched_value.searched_tag
-        if found_metadata_id is None:
-            continue
         parsed_date: datetime = metadata_parsers.parse_date(searched_value.value, metadata_parsers.DATE_PATTERNS)
         if parsed_date is None:
             # Either wrong format or no date time (it could be TZ or time)
@@ -88,11 +91,12 @@ def search_tag_value(photo: Photo, matching_groups: List[MetadataIndexingGroup],
             if indexing_tag.g0 is None or indexing_tag.tag_name is None:
                 pass # TODO validation problem
             else:
-                metadata_set.append(MetadataId(indexing_tag.g0, indexing_tag.g1, indexing_tag.tag_name, path=indexing_tag.tag_path))
+                path = parse_path(indexing_tag.tag_path) if indexing_tag.tag_path else []
+                metadata_set.append(MetadataId(indexing_tag.g0, indexing_tag.g1, indexing_tag.tag_name, path=path))
 
     return search_tag_value_by_tags(photo, metadata_set)
 
-## Not exact search of index
+## Loose search in effective index
 ## If g1 is not defined, it first searches in tags, then in all g1 groups
 def search_tag_value_by_tags(photo: Photo, requested_tags: [MetadataId]) -> SearchedTagsResult:
     result = SearchedTagsResult()
@@ -102,12 +106,12 @@ def search_tag_value_by_tags(photo: Photo, requested_tags: [MetadataId]) -> Sear
     for requested_tag in requested_tags:
         try:
             # First try: search in tags (if g1 is None) or exact g1 path
-            value = search_index_value(photo.metadata_index.exif_json, requested_tag)
+            value = search_index_value(photo.metadata_index.effective_json, requested_tag)
             result.add_result(requested_tag, requested_tag, value)
         except PathAccessError:
             # If g1 is not defined and tags search failed, try searching in all g1 keys
             if requested_tag.group_1 is None:
-                g1_results = _search_in_all_g1(photo.metadata_index.exif_json, requested_tag)
+                g1_results = _search_in_all_g1(photo.metadata_index.effective_json, requested_tag)
                 for g1_result in g1_results:
                     result.add_result(requested_tag, g1_result[0], g1_result[1])
     return result
@@ -245,11 +249,20 @@ def _get_closest_match(matched_groups: [MetadataIndexingGroup]) -> MetadataIndex
 
     return selected_group
 
-## Exact search in index
-## If g1 is not filled, searches only g0
-## If path is not filled, it searches only the root tag
-def search_index_value(index_data: Dict, metadata_id: MetadataId):
-    g1_part = "tags" if metadata_id.group_1 is None else f"g1.{metadata_id.group_1}"
-    path_part = "" if metadata_id.path is None else f"{metadata_id.path}."
-    glom_req = f"{metadata_id.group_0}.{g1_part}.{path_part}{metadata_id.tag_name}"
-    return glom(index_data, glom_req)
+def validate_index(exif_or_effective_index: Dict):
+    """
+    Validate index structure (v4 format): root dict, each g0 group has optional
+    'tags' (dict) and/or 'g1' (dict of str -> dict), at least one required.
+    Raises MatchError, TypeMatchError, or ValueError on invalid structure.
+    """
+    g0_spec = Match({Optional("tags"): dict, Optional("g1"): Match({str: dict})})
+    root_spec = Match({str: g0_spec})
+    glom(exif_or_effective_index, root_spec)
+    for g0_val in exif_or_effective_index.values():
+        if "tags" not in g0_val and "g1" not in g0_val:
+            raise ValueError("g0 group must have 'tags' or 'g1'")
+
+def apply_user_changes(photo: Photo) -> Dict:
+    copy_exif_json = copy.deepcopy(photo.metadata_index.exif_json)
+    # TODO apply changes
+    return copy_exif_json

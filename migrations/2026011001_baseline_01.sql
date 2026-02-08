@@ -12,21 +12,20 @@ CREATE TABLE public.app_data (
 );
 
 
--- public.exif_group definition
+-- public.docs_exif_group definition
 
 -- Drop table
 
--- DROP TABLE public.exif_group;
+-- DROP TABLE public.docs_exif_group;
 
-CREATE TABLE public.exif_group (
+CREATE TABLE public.docs_exif_group (
 	id uuid NOT NULL,
 	"namespace" varchar NOT NULL,
 	g0 varchar NOT NULL,
 	g1 varchar NOT NULL,
 	g2 varchar NOT NULL,
 	user_created bool NOT NULL,
-	deleted bool NOT NULL,
-	CONSTRAINT exif_group_pkey PRIMARY KEY (id)
+	CONSTRAINT docs_exif_group_pkey PRIMARY KEY (id)
 );
 
 
@@ -67,13 +66,13 @@ CREATE TABLE public.task (
 );
 
 
--- public.exif_tag definition
+-- public.docs_exif_tag definition
 
 -- Drop table
 
--- DROP TABLE public.exif_tag;
+-- DROP TABLE public.docs_exif_tag;
 
-CREATE TABLE public.exif_tag (
+CREATE TABLE public.docs_exif_tag (
 	id uuid NOT NULL,
 	group_id uuid NOT NULL,
 	exif_id varchar NOT NULL,
@@ -85,27 +84,25 @@ CREATE TABLE public.exif_tag (
 	field_name varchar NULL,
 	parent_struct_id uuid NULL,
 	user_created bool NOT NULL,
-	deleted bool NOT NULL,
-	CONSTRAINT exif_tag_pkey PRIMARY KEY (id),
-	CONSTRAINT exif_tag_group_id_fkey FOREIGN KEY (group_id) REFERENCES public.exif_group(id),
-	CONSTRAINT exif_tag_parent_struct_id_fkey FOREIGN KEY (parent_struct_id) REFERENCES public.exif_tag(id)
+	CONSTRAINT docs_exif_tag_pkey PRIMARY KEY (id),
+	CONSTRAINT docs_exif_tag_group_id_fkey FOREIGN KEY (group_id) REFERENCES public.docs_exif_group(id),
+	CONSTRAINT docs_exif_tag_parent_struct_id_fkey FOREIGN KEY (parent_struct_id) REFERENCES public.docs_exif_tag(id)
 );
 
 
--- public.exif_value definition
+-- public.docs_exif_value definition
 
 -- Drop table
 
--- DROP TABLE public.exif_value;
+-- DROP TABLE public.docs_exif_value;
 
-CREATE TABLE public.exif_value (
+CREATE TABLE public.docs_exif_value (
 	id uuid NOT NULL,
 	tag_id uuid NOT NULL,
 	value varchar NOT NULL,
 	user_created bool NOT NULL,
-	deleted bool NOT NULL,
-	CONSTRAINT exif_value_pkey PRIMARY KEY (id),
-	CONSTRAINT exif_value_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES public.exif_tag(id)
+	CONSTRAINT docs_exif_value_pkey PRIMARY KEY (id),
+	CONSTRAINT docs_exif_value_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES public.docs_exif_tag(id)
 );
 
 
@@ -153,7 +150,7 @@ CREATE TABLE public.metadata_indexing_tag (
 CREATE TABLE public.photo (
 	id uuid NOT NULL,
 	folder_id uuid NOT NULL,
-	virtual_folder_id uuid NOT NULL,
+	virtual_folder_id uuid NULL,
 	file_path varchar NOT NULL,
 	file_hash varchar NOT NULL,
 	"name" varchar NOT NULL,
@@ -201,4 +198,21 @@ CREATE TABLE public.task_log (
 	message varchar NOT NULL,
 	CONSTRAINT task_log_pkey PRIMARY KEY (id),
 	CONSTRAINT task_log_task_id_fkey FOREIGN KEY (task_id) REFERENCES public.task(id)
+);
+
+
+-- public.file_metadata_cache definition
+
+-- Drop table
+
+-- DROP TABLE public.file_metadata_cache;
+
+CREATE TABLE public.file_metadata_cache (
+	id uuid NOT NULL,
+	photo_id uuid NOT NULL,
+	created timestamp NOT NULL,
+	valid_to timestamp NOT NULL,
+	metadata_json jsonb NOT NULL,
+	CONSTRAINT file_metadata_cache_pkey PRIMARY KEY (id),
+	CONSTRAINT file_metadata_cache_photo_id_fkey FOREIGN KEY (photo_id) REFERENCES public.photo(id) ON DELETE CASCADE
 );

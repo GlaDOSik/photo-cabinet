@@ -20,8 +20,8 @@ class TestSearchTagValueByTags(unittest.TestCase):
         with open(self.test_data_file, 'r', encoding='utf-8') as f:
             self.test_data = json.load(f)
         
-        # Create photo with metadata index using Mock
-        self.metadata_index = Mock(exif_json=self.test_data)
+        # Create photo with metadata index using Mock (service reads effective_json)
+        self.metadata_index = Mock(effective_json=self.test_data)
         self.photo = Mock(metadata_index=self.metadata_index)
 
     def test_simple_tag_in_tags(self):

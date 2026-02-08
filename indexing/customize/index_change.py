@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict
 
 from domain.metadata.metadata_id import MetadataId
-from indexing.domain.index_change_status import IndexChangeStatus
+from indexing.domain.index_change_status import IndexChangeValidationStatus
 from indexing.domain.index_change_type import IndexChangeType
 
 
@@ -16,7 +16,7 @@ class IndexChange(ABC):
         pass
 
     @abstractmethod
-    def check_status(self, exif_json: Dict) -> IndexChangeStatus:
+    def validate(self, exif_json: Dict) -> IndexChangeValidationStatus:
         pass
 
     @abstractmethod
@@ -24,23 +24,13 @@ class IndexChange(ABC):
         pass
 
     def base_to_dict(self):
-        base = {"metadata_id": {"g0": self.metadata_id.group_0, "tag_name": self.metadata_id.tag_name},
-                "type": self.change_type.name}
-        if self.metadata_id.group_1 is not None:
-            base["metadata_id"]["g1"] = self.metadata_id.group_1
-        if self.metadata_id.path is not None:
-            base["metadata_id"]["path"] = self.metadata_id.path
+        base = {"metadata_id": self.metadata_id.to_dict(), "type": self.change_type.name}
         return base
 
     @staticmethod
     def from_dict(input_dict: Dict):
         change_type: IndexChangeType = IndexChangeType[input_dict.get("type")]
-        metadata_id_dict = input_dict.get("metadata_id")
-        g0 = metadata_id_dict.get("g0")
-        g1 = metadata_id_dict.get("g1")
-        tag_name = metadata_id_dict.get("tag_name")
-        path = metadata_id_dict.get("path")
-        metadata_id = MetadataId(g0, g1, tag_name, path)
+        metadata_id = MetadataId.from_dict(input_dict.get("metadata_id", {}))
         
         if change_type == IndexChangeType.CREATE:
             value = input_dict.get("new_value")

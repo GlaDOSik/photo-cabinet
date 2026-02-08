@@ -13,7 +13,33 @@ from indexing.domain.photo_size_result import PhotoSizeResult
 from indexing.domain.searched_tags_result import SearchedTagsResult
 from service import image_service
 
+# Load metadata from photo, apply user changes, get created date and size
+def update_metadata_index(session: Session, photo: Photo):
+    create_update_metadata_index(session, photo)
+    session.flush()
+    apply_user_changes(photo)
+    session.flush()
 
+    created_date_tags = search_created_date_tags(session, photo)
+    create_date_result = get_created_date(created_date_tags)
+    if create_date_result.has_result():
+        photo.metadata_index.photo_created = create_date_result.created_date
+        photo.metadata_index.photo_created_origin = create_date_result.metadata_id.get_key()
+
+    photo_size_tags = search_photo_size_tags(session, photo)
+    photo_size_result: PhotoSizeResult = get_photo_size(photo, photo_size_tags)
+    photo.metadata_index.width = photo_size_result.width
+    photo.metadata_index.height = photo_size_result.height
+    photo.metadata_index.size_origin = f"Width: {photo_size_result.width_origin}, Height: {photo_size_result.height_origin}"
+
+# Takes exif_json, applies user changes and save effective_json
+def apply_user_changes(photo: Photo):
+    if photo.metadata_index is None:
+        return
+    effective_json = metadata_indexing_service.apply_user_changes(photo)
+    photo.metadata_index.effective_json = effective_json
+
+# Load metadata from photo and save it to exif_json
 def create_update_metadata_index(session: Session, photo: Photo):
     # Get all matching groups (global and path-specific)
     filtering_groups: List[MetadataIndexingGroup] = find_matching_groups(session, photo.file_path, GroupType.INDEXING_FILTER)
@@ -38,6 +64,7 @@ def search_photo_size_tags(session: Session, photo: Photo) -> SearchedTagsResult
     groups: List[MetadataIndexingGroup] = find_matching_groups(session, photo.file_path, GroupType.PHOTO_SIZE_GROUP)
     return metadata_indexing_service.search_tag_value(photo, groups, PHOTO_SIZE_SET)
 
+# Get photo size from result by tag search or directly from image if size in tags not provided
 def get_photo_size(photo: Photo, result: SearchedTagsResult) -> PhotoSizeResult:
     result: PhotoSizeResult = metadata_indexing_service.get_photo_size(result)
     if result.width is None or result.height is None:

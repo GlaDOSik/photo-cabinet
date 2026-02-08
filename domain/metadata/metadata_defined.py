@@ -3,6 +3,10 @@ from domain.metadata.metadata_group_1 import MetadataGroup1
 from domain.metadata.metadata_id import MetadataId
 from domain.metadata.metadata_name import MetadataName
 
+# G0
+G0_FILE = MetadataId.of(MetadataGroup0.FILE, None, None)
+G0_EXIF = MetadataId.of(MetadataGroup0.EXIF, None, None)
+
 # Created date
 EXIF_DATE_TIME_ORIGINAL = MetadataId.of(MetadataGroup0.EXIF, None, MetadataName.DATE_TIME_ORIGINAL)
 EXIF_OFFSET_TIME_ORIG = MetadataId.of(MetadataGroup0.EXIF, None, MetadataName.OFFSET_TIME_ORIG)
