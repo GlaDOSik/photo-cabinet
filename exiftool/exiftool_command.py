@@ -13,6 +13,8 @@ EXIFTOOL_STRUCT_OPT = "-struct"
 EXIFTOOL_XML_OPT = "-listx"
 # with -listx, output flags (parent struct, isList)
 EXIFTOOL_FLAGS_OPT = "-f"
+# output contains tag ids - formated as decimal if possible
+EXIFTOOL_TAG_IDS_DEC_OPT = "-D"
 
 
 class ExiftoolCommand:
@@ -61,6 +63,7 @@ class ExiftoolCommand:
                 with_option(EXIFTOOL_JSON_OPT)
                 .with_option(EXIFTOOL_GROUP_OPT)
                 .with_option(EXIFTOOL_STRUCT_OPT)
+                .with_option(EXIFTOOL_TAG_IDS_DEC_OPT)
                 .with_file(file_path))
 
     @staticmethod

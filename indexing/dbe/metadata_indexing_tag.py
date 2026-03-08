@@ -20,6 +20,7 @@ class MetadataIndexingTag(Base):
     
     g0: Mapped[Optional[str]]
     g1: Mapped[Optional[str]]
+    tag_id: Mapped[Optional[str]]
     tag_name: Mapped[Optional[str]]
     tag_path: Mapped[Optional[str]]
 

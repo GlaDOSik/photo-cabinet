@@ -6,10 +6,10 @@ from uuid import uuid4
 from sqlalchemy.orm import Session
 
 from dbe.app_data import get_app_data_val, set_app_data_value
+from dbe.docs.docs_et_group import DocsExifToolGroup
+from dbe.docs.docs_et_value import DocsExifToolValue
 from domain.app_data_field import AppDataField
-from exiftool.dbe.docs_et_group import DocsExifToolGroup
-from exiftool.dbe.docs_et_tag import DocsExifToolTag
-from exiftool.dbe.docs_et_value import DocsExifToolValue
+from dbe.docs.docs_et_tag import DocsExifToolTag
 from exiftool.exiftool_command import ExiftoolCommand
 
 ## Service for working with Exiftool

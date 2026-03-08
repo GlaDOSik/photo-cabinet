@@ -12,8 +12,8 @@ class TestParseMetadataIndex(unittest.TestCase):
         # Get the path to the tests directory
         tests_dir = Path(__file__).parent.parent
         self.data_dir = tests_dir / "data"
-        self.input_file = self.data_dir / "photo_metadata.json"
-        self.expected_output_file = self.data_dir / "photo_metadata_transformed_v4.json"
+        self.input_file = self.data_dir / "1_metadata_exiftool_output.json"
+        self.expected_output_file = self.data_dir / "2_metadata_db_index.json"
     
     def test_parse_metadata_index(self):
         """Test that parse_metadata_index correctly transforms the input JSON to v4 format."""
@@ -28,7 +28,7 @@ class TestParseMetadataIndex(unittest.TestCase):
         # Parse the metadata index
         result = _parse_metadata_index(input_json)
         
-        # Verify the result is a dict (v4 format)
+        # Verify the result is a dict
         self.assertIsInstance(result, dict)
         
         # Compare the entire structure

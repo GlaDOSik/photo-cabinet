@@ -46,7 +46,7 @@ class SearchedTagsResult:
             self.values_by_searched_tag[searched_tag.get_key()] = values_by_se
         values_by_se.append(searched_value)
     
-    def get_value(self, metadata_id: MetadataId) -> SearchedValue:
+    def get_first_value(self, metadata_id: MetadataId) -> SearchedValue:
         """
         Get a single value for the given MetadataId.
         If multiple values exist, returns the first one.
@@ -66,7 +66,7 @@ class SearchedTagsResult:
         key = metadata_id.get_key()
         return self.values_by_requested_tag.get(key, [])
     
-    def get_single_value(self, metadata_id: MetadataId) -> SearchedValue:
+    def get_one_value(self, metadata_id: MetadataId) -> SearchedValue:
         """
         Get a single value for the given MetadataId.
         Raises ValueError if multiple values exist (use get_value() to get first, or get_all_values() for all).
@@ -81,7 +81,7 @@ class SearchedTagsResult:
         return values[0]
 
     def get_value_as_timezone(self, metadata_id: MetadataId) -> Optional[datetime.timezone]:
-        tz_info_str = self.get_value(metadata_id)
+        tz_info_str = self.get_first_value(metadata_id)
         if tz_info_str.value is None:
             return None
         return metadata_parsers.parse_timezone(tz_info_str.value)

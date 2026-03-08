@@ -20,7 +20,7 @@ from dbe.app_data import get_app_data_val, set_app_data_value
 from exiftool import exif_service
 
 # Import all database models to ensure they are registered
-from service.migration_runner import MigrationRunner
+from vial.migration_runner import MigrationRunner
 
 # Set up logging
 logging.basicConfig(

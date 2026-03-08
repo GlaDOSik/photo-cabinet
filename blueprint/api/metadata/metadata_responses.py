@@ -14,3 +14,11 @@ class PhotoMetadataIndex(Schema):
     @staticmethod
     def to_resp(ui_view: Dict) -> Dict:
         return {"ui_view": ui_view}
+
+
+class MetadataInfoResponse(Schema):
+    md_docs = fields.Str(required=True)
+
+    @staticmethod
+    def to_resp(md_docs: str) -> Dict:
+        return {"md_docs": md_docs}

@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship, Session
 from database import Base
-from exiftool.dbe.docs_et_group import DocsExifToolGroup
+from dbe.docs.docs_et_group import DocsExifToolGroup
 
 
 class DocsExifToolTag(Base):
@@ -38,6 +38,12 @@ class DocsExifToolTag(Base):
     )
     user_created: Mapped[bool] = mapped_column(default=False)
 
+
+def find_by_tag_name(session: Session, tag_name: str) -> [DocsExifToolTag]:
+    return session.query(DocsExifToolTag).filter_by(name=tag_name).all()
+
+def find_by_field_name(session: Session, field_name: str) -> [DocsExifToolTag]:
+    return session.query(DocsExifToolTag).filter_by(field_name=field_name).all()
 
 def find_by_group(session: Session, group_id: UUID):
     return session.query(DocsExifToolTag).filter_by(group_id=group_id).filter_by(deleted=False).filter_by(user_created=False).all()

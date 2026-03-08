@@ -15,7 +15,7 @@ from database import DBSession
 
 from dbe import task_log, task, folder, photo, app_data
 from indexing.dbe import metadata_index, metadata_indexing_group, metadata_indexing_tag
-from exiftool.dbe import docs_et_tag, docs_et_group, docs_et_value
+from dbe.docs import docs_et_tag
 
 logger = logging.getLogger()
 

@@ -6,12 +6,14 @@ from marshmallow import Schema, fields, validate, validates
 from domain.metadata.metadata_id import MetadataId, PathStruct, PathArray
 from domain.metadata_index_type import MetadataIndexType
 
+
 class MetadataIdRequest(Schema):
-    ui_view_tag_path = fields.List(fields.Raw())  # str or int per element
-    tag_value = fields.Str()
+    ui_view_tag_path = fields.List(fields.Raw())  # str or int per element, only path
+    tag_name = fields.Str(required=False)
+    tag_value = fields.Str(required=False)
 
     @validates("ui_view_tag_path")
-    def validate_ui_view_tag_path(self, value):
+    def validate_ui_view_tag_path(self, value, data_key):
         for item in value:
             if not isinstance(item, (str, int)):
                 raise validate.ValidationError(
@@ -29,19 +31,26 @@ class MetadataIdRequest(Schema):
                 g0 = tag_path_part
             elif i == 1:
                 g1 = None if tag_path_part == "-" else tag_path_part
-            elif i < len(tag_path) - 1:  # path parts only (exclude last = tag_name)
+            else:
                 if isinstance(tag_path_part, int):
                     array_name = path[-1].struct_name
                     path.pop()
                     path.append(PathArray(array_name, tag_path_part))
                 else:
                     path.append(PathStruct(tag_path_part))
-        tag_name = tag_path[len(tag_path) - 1]
-        return MetadataId(g0, g1, tag_name, path)
+        return MetadataId(g0, g1, request.get("tag_name"), path)
 
     @staticmethod
     def get_tag_value(request: Dict):
         return request.get("tag_value")
+
+
+class MetadataInfoRequest(Schema):
+    metadata_id = fields.Nested(MetadataIdRequest, many=False, required=True)
+
+    @staticmethod
+    def get_metadata_id(request: Dict) -> Dict:
+        return request.get("metadata_id")
 
 
 class GetPhotoMetadataRequest(Schema):

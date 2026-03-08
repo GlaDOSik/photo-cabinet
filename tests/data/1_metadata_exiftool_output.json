@@ -1,0 +1,1649 @@
+[{
+  "SourceFile": "ROM_4530.jpg",
+  "ExifTool": {
+    "ExifToolVersion": {
+      "id": "ExifToolVersion",
+      "val": 13.10
+    }
+  },
+  "File:System": {
+    "FileName": {
+      "id": "FileName",
+      "val": "ROM_4530.jpg"
+    },
+    "Directory": {
+      "id": "Directory",
+      "val": "."
+    },
+    "FileSize": {
+      "id": "FileSize",
+      "val": "8.1 MB"
+    },
+    "FileModifyDate": {
+      "id": "FileModifyDate",
+      "val": "2025:09:24 16:06:53+02:00"
+    },
+    "FileAccessDate": {
+      "id": "FileAccessDate",
+      "val": "2026:02:28 14:20:19+01:00"
+    },
+    "FileInodeChangeDate": {
+      "id": "FileInodeChangeDate",
+      "val": "2025:12:25 15:45:51+01:00"
+    },
+    "FilePermissions": {
+      "id": "FilePermissions",
+      "val": "-rw-rw-rw-"
+    }
+  },
+  "File": {
+    "FileType": {
+      "id": "FileType",
+      "val": "JPEG"
+    },
+    "FileTypeExtension": {
+      "id": "FileTypeExtension",
+      "val": "jpg"
+    },
+    "MIMEType": {
+      "id": "MIMEType",
+      "val": "image/jpeg"
+    },
+    "ExifByteOrder": {
+      "id": "ExifByteOrder",
+      "val": "Little-endian (Intel, II)"
+    },
+    "CurrentIPTCDigest": {
+      "id": "CurrentIPTCDigest",
+      "val": "16fe8d4a761e3e52b715c5733cb7cd5b"
+    },
+    "ImageWidth": {
+      "id": "ImageWidth",
+      "val": 3613
+    },
+    "ImageHeight": {
+      "id": "ImageHeight",
+      "val": 5430
+    },
+    "EncodingProcess": {
+      "id": "EncodingProcess",
+      "val": "Baseline DCT, Huffman coding"
+    },
+    "BitsPerSample": {
+      "id": "BitsPerSample",
+      "val": 8
+    },
+    "ColorComponents": {
+      "id": "ColorComponents",
+      "val": 3
+    },
+    "YCbCrSubSampling": {
+      "id": "YCbCrSubSampling",
+      "val": "YCbCr4:4:4 (1 1)"
+    }
+  },
+  "EXIF:IFD0": {
+    "Make": {
+      "id": 271,
+      "val": "NIKON CORPORATION"
+    },
+    "Model": {
+      "id": 272,
+      "val": "NIKON Z 6"
+    },
+    "XResolution": {
+      "id": 282,
+      "val": 240
+    },
+    "YResolution": {
+      "id": 283,
+      "val": 240
+    },
+    "ResolutionUnit": {
+      "id": 296,
+      "val": "inches"
+    },
+    "Software": {
+      "id": 305,
+      "val": "Adobe Lightroom 8.5.1 (Macintosh)"
+    },
+    "ModifyDate": {
+      "id": 306,
+      "val": "2025:09:15 01:18:01"
+    },
+    "Artist": {
+      "id": 315,
+      "val": "ROMAN_MATEJEK"
+    }
+  },
+  "EXIF:ExifIFD": {
+    "ExposureTime": {
+      "id": 33434,
+      "val": "1/400"
+    },
+    "FNumber": {
+      "id": 33437,
+      "val": 2.8
+    },
+    "ExposureProgram": {
+      "id": 34850,
+      "val": "Manual"
+    },
+    "ISO": {
+      "id": 34855,
+      "val": 200
+    },
+    "SensitivityType": {
+      "id": 34864,
+      "val": "Recommended Exposure Index"
+    },
+    "RecommendedExposureIndex": {
+      "id": 34866,
+      "val": 200
+    },
+    "ExifVersion": {
+      "id": 36864,
+      "val": "0231"
+    },
+    "DateTimeOriginal": {
+      "id": 36867,
+      "val": "2025:09:06 11:12:41"
+    },
+    "CreateDate": {
+      "id": 36868,
+      "val": "2025:09:06 11:12:41"
+    },
+    "OffsetTime": {
+      "id": 36880,
+      "val": "+02:00"
+    },
+    "OffsetTimeOriginal": {
+      "id": 36881,
+      "val": "+02:00"
+    },
+    "OffsetTimeDigitized": {
+      "id": 36882,
+      "val": "+02:00"
+    },
+    "ShutterSpeedValue": {
+      "id": 37377,
+      "val": "1/400"
+    },
+    "ApertureValue": {
+      "id": 37378,
+      "val": 2.8
+    },
+    "ExposureCompensation": {
+      "id": 37380,
+      "val": 0
+    },
+    "MeteringMode": {
+      "id": 37383,
+      "val": "Multi-segment"
+    },
+    "LightSource": {
+      "id": 37384,
+      "val": "Unknown"
+    },
+    "Flash": {
+      "id": 37385,
+      "val": "No Flash"
+    },
+    "FocalLength": {
+      "id": 37386,
+      "val": "69.0 mm"
+    },
+    "SubSecTimeOriginal": {
+      "id": 37521,
+      "val": 56
+    },
+    "SubSecTimeDigitized": {
+      "id": 37522,
+      "val": 56
+    },
+    "ColorSpace": {
+      "id": 40961,
+      "val": "sRGB"
+    },
+    "FocalPlaneXResolution": {
+      "id": 41486,
+      "val": 1683.066528
+    },
+    "FocalPlaneYResolution": {
+      "id": 41487,
+      "val": 1683.066528
+    },
+    "FocalPlaneResolutionUnit": {
+      "id": 41488,
+      "val": "cm"
+    },
+    "SensingMethod": {
+      "id": 41495,
+      "val": "One-chip color area"
+    },
+    "FileSource": {
+      "id": 41728,
+      "val": "Digital Camera"
+    },
+    "SceneType": {
+      "id": 41729,
+      "val": "Directly photographed"
+    },
+    "CFAPattern": {
+      "id": 41730,
+      "val": "[Red,Green][Green,Blue]"
+    },
+    "CustomRendered": {
+      "id": 41985,
+      "val": "Custom"
+    },
+    "ExposureMode": {
+      "id": 41986,
+      "val": "Manual"
+    },
+    "WhiteBalance": {
+      "id": 41987,
+      "val": "Auto"
+    },
+    "FocalLengthIn35mmFormat": {
+      "id": 41989,
+      "val": "69 mm"
+    },
+    "SceneCaptureType": {
+      "id": 41990,
+      "val": "Standard"
+    },
+    "GainControl": {
+      "id": 41991,
+      "val": "None"
+    },
+    "Contrast": {
+      "id": 41992,
+      "val": "Normal"
+    },
+    "Saturation": {
+      "id": 41993,
+      "val": "Normal"
+    },
+    "Sharpness": {
+      "id": 41994,
+      "val": "Normal"
+    },
+    "SubjectDistanceRange": {
+      "id": 41996,
+      "val": "Unknown"
+    },
+    "SerialNumber": {
+      "id": 42033,
+      "val": 6079619
+    },
+    "LensInfo": {
+      "id": 42034,
+      "val": "24-70mm f/2.8"
+    },
+    "LensMake": {
+      "id": 42035,
+      "val": "NIKON"
+    },
+    "LensModel": {
+      "id": 42036,
+      "val": "NIKKOR Z 24-70mm f/2.8 S"
+    },
+    "LensSerialNumber": {
+      "id": 42037,
+      "val": 20004015
+    }
+  },
+  "EXIF:IFD1": {
+    "Compression": {
+      "id": 259,
+      "val": "JPEG (old-style)"
+    },
+    "XResolution": {
+      "id": 282,
+      "val": 72
+    },
+    "YResolution": {
+      "id": 283,
+      "val": 72
+    },
+    "ResolutionUnit": {
+      "id": 296,
+      "val": "inches"
+    },
+    "ThumbnailOffset": {
+      "id": 513,
+      "val": 1092
+    },
+    "ThumbnailLength": {
+      "id": 514,
+      "val": 15501
+    },
+    "ThumbnailImage": {
+      "id": "Exif-ThumbnailImage",
+      "val": "(Binary data 15501 bytes, use -b option to extract)"
+    }
+  },
+  "Photoshop": {
+    "XResolution": {
+      "id": 0,
+      "val": 240
+    },
+    "DisplayedUnitsX": {
+      "id": 2,
+      "val": "inches"
+    },
+    "YResolution": {
+      "id": 4,
+      "val": 240
+    },
+    "DisplayedUnitsY": {
+      "id": 6,
+      "val": "inches"
+    },
+    "PhotoshopThumbnail": {
+      "id": 1036,
+      "val": "(Binary data 15501 bytes, use -b option to extract)"
+    },
+    "IPTCDigest": {
+      "id": 1061,
+      "val": "16fe8d4a761e3e52b715c5733cb7cd5b"
+    }
+  },
+  "IPTC": {
+    "CodedCharacterSet": {
+      "id": 90,
+      "val": "UTF8"
+    },
+    "ApplicationRecordVersion": {
+      "id": 0,
+      "val": 4
+    },
+    "DateCreated": {
+      "id": 55,
+      "val": "2025:09:06"
+    },
+    "TimeCreated": {
+      "id": 60,
+      "val": "11:12:41+02:00"
+    },
+    "DigitalCreationDate": {
+      "id": 62,
+      "val": "2025:09:06"
+    },
+    "DigitalCreationTime": {
+      "id": 63,
+      "val": "11:12:41+02:00"
+    },
+    "By-line": {
+      "id": 80,
+      "val": "ROMAN_MATEJEK"
+    }
+  },
+  "ICC_Profile:ICC-header": {
+    "ProfileCMMType": {
+      "id": 4,
+      "val": "Linotronic"
+    },
+    "ProfileVersion": {
+      "id": 8,
+      "val": "2.1.0"
+    },
+    "ProfileClass": {
+      "id": 12,
+      "val": "Display Device Profile"
+    },
+    "ColorSpaceData": {
+      "id": 16,
+      "val": "RGB "
+    },
+    "ProfileConnectionSpace": {
+      "id": 20,
+      "val": "XYZ "
+    },
+    "ProfileDateTime": {
+      "id": 24,
+      "val": "1998:02:09 06:49:00"
+    },
+    "ProfileFileSignature": {
+      "id": 36,
+      "val": "acsp"
+    },
+    "PrimaryPlatform": {
+      "id": 40,
+      "val": "Microsoft Corporation"
+    },
+    "CMMFlags": {
+      "id": 44,
+      "val": "Not Embedded, Independent"
+    },
+    "DeviceManufacturer": {
+      "id": 48,
+      "val": "Hewlett-Packard"
+    },
+    "DeviceModel": {
+      "id": 52,
+      "val": "sRGB"
+    },
+    "DeviceAttributes": {
+      "id": 56,
+      "val": "Reflective, Glossy, Positive, Color"
+    },
+    "RenderingIntent": {
+      "id": 64,
+      "val": "Perceptual"
+    },
+    "ConnectionSpaceIlluminant": {
+      "id": 68,
+      "val": "0.9642 1 0.82491"
+    },
+    "ProfileCreator": {
+      "id": 80,
+      "val": "Hewlett-Packard"
+    },
+    "ProfileID": {
+      "id": 84,
+      "val": 0
+    }
+  },
+  "ICC_Profile": {
+    "ProfileCopyright": {
+      "id": "cprt",
+      "val": "Copyright (c) 1998 Hewlett-Packard Company"
+    },
+    "ProfileDescription": {
+      "id": "desc",
+      "val": "sRGB IEC61966-2.1"
+    },
+    "MediaWhitePoint": {
+      "id": "wtpt",
+      "val": "0.95045 1 1.08905"
+    },
+    "MediaBlackPoint": {
+      "id": "bkpt",
+      "val": "0 0 0"
+    },
+    "RedMatrixColumn": {
+      "id": "rXYZ",
+      "val": "0.43607 0.22249 0.01392"
+    },
+    "GreenMatrixColumn": {
+      "id": "gXYZ",
+      "val": "0.38515 0.71687 0.09708"
+    },
+    "BlueMatrixColumn": {
+      "id": "bXYZ",
+      "val": "0.14307 0.06061 0.7141"
+    },
+    "DeviceMfgDesc": {
+      "id": "dmnd",
+      "val": "IEC http://www.iec.ch"
+    },
+    "DeviceModelDesc": {
+      "id": "dmdd",
+      "val": "IEC 61966-2.1 Default RGB colour space - sRGB"
+    },
+    "ViewingCondDesc": {
+      "id": "vued",
+      "val": "Reference Viewing Condition in IEC61966-2.1"
+    },
+    "Luminance": {
+      "id": "lumi",
+      "val": "76.03647 80 87.12462"
+    },
+    "Technology": {
+      "id": "tech",
+      "val": "Cathode Ray Tube Display"
+    },
+    "RedTRC": {
+      "id": "rTRC",
+      "val": "(Binary data 2060 bytes, use -b option to extract)"
+    },
+    "GreenTRC": {
+      "id": "gTRC",
+      "val": "(Binary data 2060 bytes, use -b option to extract)"
+    },
+    "BlueTRC": {
+      "id": "bTRC",
+      "val": "(Binary data 2060 bytes, use -b option to extract)"
+    }
+  },
+  "ICC_Profile:ICC-view": {
+    "ViewingCondIlluminant": {
+      "id": 8,
+      "val": "19.6445 20.3718 16.8089"
+    },
+    "ViewingCondSurround": {
+      "id": 20,
+      "val": "3.92889 4.07439 3.36179"
+    },
+    "ViewingCondIlluminantType": {
+      "id": 32,
+      "val": "D50"
+    }
+  },
+  "ICC_Profile:ICC-meas": {
+    "MeasurementObserver": {
+      "id": 8,
+      "val": "CIE 1931"
+    },
+    "MeasurementBacking": {
+      "id": 12,
+      "val": "0 0 0"
+    },
+    "MeasurementGeometry": {
+      "id": 24,
+      "val": "Unknown"
+    },
+    "MeasurementFlare": {
+      "id": 28,
+      "val": "0.999%"
+    },
+    "MeasurementIlluminant": {
+      "id": 32,
+      "val": "D65"
+    }
+  },
+  "XMP:XMP-x": {
+    "XMPToolkit": {
+      "id": "xmptk",
+      "val": "Adobe XMP Core 7.0-c000 1.000000, 0000/00/00-00:00:00        "
+    }
+  },
+  "XMP:XMP-xmp": {
+    "CreatorTool": {
+      "id": "CreatorTool",
+      "val": "Adobe Lightroom 8.5.1 (Macintosh)"
+    },
+    "CreateDate": {
+      "id": "CreateDate",
+      "val": "2025:09:06 11:12:41.56+02:00"
+    },
+    "Rating": {
+      "id": "Rating",
+      "val": 2
+    },
+    "ModifyDate": {
+      "id": "ModifyDate",
+      "val": "2025:09:15 01:18:01+02:00"
+    },
+    "MetadataDate": {
+      "id": "MetadataDate",
+      "val": "2025:09:15 01:18:01+02:00"
+    }
+  },
+  "XMP:XMP-dc": {
+    "Format": {
+      "id": "format",
+      "val": "image/jpeg"
+    },
+    "Creator": {
+      "id": "creator",
+      "val": ["ROMAN_MATEJEK"]
+    }
+  },
+  "XMP:XMP-aux": {
+    "SerialNumber": {
+      "id": "SerialNumber",
+      "val": 6079619
+    },
+    "LensInfo": {
+      "id": "LensInfo",
+      "val": "24-70mm f/2.8"
+    },
+    "Lens": {
+      "id": "Lens",
+      "val": "NIKKOR Z 24-70mm f/2.8 S"
+    },
+    "LensSerialNumber": {
+      "id": "LensSerialNumber",
+      "val": 20004015
+    },
+    "ImageNumber": {
+      "id": "ImageNumber",
+      "val": 55934
+    },
+    "DistortionCorrectionAlreadyApplied": {
+      "id": "DistortionCorrectionAlreadyApplied",
+      "val": true
+    },
+    "LateralChromaticAberrationCorrectionAlreadyApplied": {
+      "id": "LateralChromaticAberrationCorrectionAlreadyApplied",
+      "val": true
+    },
+    "VignetteCorrectionAlreadyApplied": {
+      "id": "VignetteCorrectionAlreadyApplied",
+      "val": true
+    }
+  },
+  "XMP:XMP-exifEX": {
+    "LensModel": {
+      "id": "LensModel",
+      "val": "NIKKOR Z 24-70mm f/2.8 S"
+    }
+  },
+  "XMP:XMP-photoshop": {
+    "DateCreated": {
+      "id": "DateCreated",
+      "val": "2025:09:06 11:12:41.56+02:00"
+    }
+  },
+  "XMP:XMP-xmpMM": {
+    "DocumentID": {
+      "id": "DocumentID",
+      "val": "xmp.did:4f84eae0-f353-469b-92d3-3ab4f701f20f"
+    },
+    "OriginalDocumentID": {
+      "id": "OriginalDocumentID",
+      "val": "58BBD29F8B4DDC5832F95A95926723A5"
+    },
+    "InstanceID": {
+      "id": "InstanceID",
+      "val": "xmp.iid:4f84eae0-f353-469b-92d3-3ab4f701f20f"
+    },
+    "History": {
+      "id": "History",
+      "val": [{
+        "Action": "saved",
+        "Changed": "/metadata",
+        "InstanceID": "xmp.iid:65694487-a411-4973-a54a-340d1de31197",
+        "SoftwareAgent": "Adobe Lightroom 8.5.1 (Macintosh)",
+        "When": "2025:09:09 15:32:45+02:00"
+      },{
+        "Action": "saved",
+        "Changed": "/metadata",
+        "InstanceID": "xmp.iid:de85c1d4-dde2-49b2-9e9a-3c23473cda0e",
+        "SoftwareAgent": "Adobe Lightroom 8.5.1 (Macintosh)",
+        "When": "2025:09:12 18:49:46+02:00"
+      },{
+        "Action": "derived",
+        "Parameters": "converted from image/x-nikon-nef to image/jpeg, saved to new location"
+      },{
+        "Action": "saved",
+        "Changed": "/",
+        "InstanceID": "xmp.iid:4f84eae0-f353-469b-92d3-3ab4f701f20f",
+        "SoftwareAgent": "Adobe Lightroom 8.5.1 (Macintosh)",
+        "When": "2025:09:15 01:18:01+02:00"
+      }]
+    },
+    "DerivedFrom": {
+      "id": "DerivedFrom",
+      "val": {
+        "DocumentID": "58BBD29F8B4DDC5832F95A95926723A5",
+        "InstanceID": "xmp.iid:de85c1d4-dde2-49b2-9e9a-3c23473cda0e",
+        "OriginalDocumentID": "58BBD29F8B4DDC5832F95A95926723A5"
+      }
+    }
+  },
+  "XMP:XMP-xmpDM": {
+    "Good": {
+      "id": "good",
+      "val": true
+    }
+  },
+  "XMP:XMP-crs": {
+    "RawFileName": {
+      "id": "RawFileName",
+      "val": "ROM_4530.NEF"
+    },
+    "Version": {
+      "id": "Version",
+      "val": 17.5
+    },
+    "CompatibleVersion": {
+      "id": "CompatibleVersion",
+      "val": 251854848
+    },
+    "ProcessVersion": {
+      "id": "ProcessVersion",
+      "val": 15.4
+    },
+    "WhiteBalance": {
+      "id": "WhiteBalance",
+      "val": "Custom"
+    },
+    "ColorTemperature": {
+      "id": "Temperature",
+      "val": 5496
+    },
+    "Tint": {
+      "id": "Tint",
+      "val": 0
+    },
+    "Exposure2012": {
+      "id": "Exposure2012",
+      "val": "+0.05"
+    },
+    "Contrast2012": {
+      "id": "Contrast2012",
+      "val": -17
+    },
+    "Highlights2012": {
+      "id": "Highlights2012",
+      "val": -51
+    },
+    "Shadows2012": {
+      "id": "Shadows2012",
+      "val": 0
+    },
+    "Whites2012": {
+      "id": "Whites2012",
+      "val": "+11"
+    },
+    "Blacks2012": {
+      "id": "Blacks2012",
+      "val": -26
+    },
+    "Texture": {
+      "id": "Texture",
+      "val": -4
+    },
+    "Clarity2012": {
+      "id": "Clarity2012",
+      "val": -5
+    },
+    "Dehaze": {
+      "id": "Dehaze",
+      "val": -5
+    },
+    "Vibrance": {
+      "id": "Vibrance",
+      "val": -3
+    },
+    "Saturation": {
+      "id": "Saturation",
+      "val": -13
+    },
+    "ParametricShadows": {
+      "id": "ParametricShadows",
+      "val": 0
+    },
+    "ParametricDarks": {
+      "id": "ParametricDarks",
+      "val": 0
+    },
+    "ParametricLights": {
+      "id": "ParametricLights",
+      "val": 0
+    },
+    "ParametricHighlights": {
+      "id": "ParametricHighlights",
+      "val": 0
+    },
+    "ParametricShadowSplit": {
+      "id": "ParametricShadowSplit",
+      "val": 25
+    },
+    "ParametricMidtoneSplit": {
+      "id": "ParametricMidtoneSplit",
+      "val": 50
+    },
+    "ParametricHighlightSplit": {
+      "id": "ParametricHighlightSplit",
+      "val": 75
+    },
+    "Sharpness": {
+      "id": "Sharpness",
+      "val": 55
+    },
+    "SharpenRadius": {
+      "id": "SharpenRadius",
+      "val": "+1.1"
+    },
+    "SharpenDetail": {
+      "id": "SharpenDetail",
+      "val": 49
+    },
+    "SharpenEdgeMasking": {
+      "id": "SharpenEdgeMasking",
+      "val": 0
+    },
+    "LuminanceSmoothing": {
+      "id": "LuminanceSmoothing",
+      "val": 0
+    },
+    "ColorNoiseReduction": {
+      "id": "ColorNoiseReduction",
+      "val": 25
+    },
+    "ColorNoiseReductionDetail": {
+      "id": "ColorNoiseReductionDetail",
+      "val": 50
+    },
+    "ColorNoiseReductionSmoothness": {
+      "id": "ColorNoiseReductionSmoothness",
+      "val": 50
+    },
+    "HueAdjustmentRed": {
+      "id": "HueAdjustmentRed",
+      "val": -2
+    },
+    "HueAdjustmentOrange": {
+      "id": "HueAdjustmentOrange",
+      "val": 0
+    },
+    "HueAdjustmentYellow": {
+      "id": "HueAdjustmentYellow",
+      "val": 0
+    },
+    "HueAdjustmentGreen": {
+      "id": "HueAdjustmentGreen",
+      "val": 0
+    },
+    "HueAdjustmentAqua": {
+      "id": "HueAdjustmentAqua",
+      "val": 0
+    },
+    "HueAdjustmentBlue": {
+      "id": "HueAdjustmentBlue",
+      "val": 0
+    },
+    "HueAdjustmentPurple": {
+      "id": "HueAdjustmentPurple",
+      "val": 0
+    },
+    "HueAdjustmentMagenta": {
+      "id": "HueAdjustmentMagenta",
+      "val": 0
+    },
+    "SaturationAdjustmentRed": {
+      "id": "SaturationAdjustmentRed",
+      "val": "+6"
+    },
+    "SaturationAdjustmentOrange": {
+      "id": "SaturationAdjustmentOrange",
+      "val": -16
+    },
+    "SaturationAdjustmentYellow": {
+      "id": "SaturationAdjustmentYellow",
+      "val": -43
+    },
+    "SaturationAdjustmentGreen": {
+      "id": "SaturationAdjustmentGreen",
+      "val": -30
+    },
+    "SaturationAdjustmentAqua": {
+      "id": "SaturationAdjustmentAqua",
+      "val": 0
+    },
+    "SaturationAdjustmentBlue": {
+      "id": "SaturationAdjustmentBlue",
+      "val": "+25"
+    },
+    "SaturationAdjustmentPurple": {
+      "id": "SaturationAdjustmentPurple",
+      "val": 0
+    },
+    "SaturationAdjustmentMagenta": {
+      "id": "SaturationAdjustmentMagenta",
+      "val": 0
+    },
+    "LuminanceAdjustmentRed": {
+      "id": "LuminanceAdjustmentRed",
+      "val": "+7"
+    },
+    "LuminanceAdjustmentOrange": {
+      "id": "LuminanceAdjustmentOrange",
+      "val": "+13"
+    },
+    "LuminanceAdjustmentYellow": {
+      "id": "LuminanceAdjustmentYellow",
+      "val": 0
+    },
+    "LuminanceAdjustmentGreen": {
+      "id": "LuminanceAdjustmentGreen",
+      "val": 0
+    },
+    "LuminanceAdjustmentAqua": {
+      "id": "LuminanceAdjustmentAqua",
+      "val": 0
+    },
+    "LuminanceAdjustmentBlue": {
+      "id": "LuminanceAdjustmentBlue",
+      "val": "+42"
+    },
+    "LuminanceAdjustmentPurple": {
+      "id": "LuminanceAdjustmentPurple",
+      "val": "+1"
+    },
+    "LuminanceAdjustmentMagenta": {
+      "id": "LuminanceAdjustmentMagenta",
+      "val": 0
+    },
+    "SplitToningShadowHue": {
+      "id": "SplitToningShadowHue",
+      "val": 42
+    },
+    "SplitToningShadowSaturation": {
+      "id": "SplitToningShadowSaturation",
+      "val": 0
+    },
+    "SplitToningHighlightHue": {
+      "id": "SplitToningHighlightHue",
+      "val": 269
+    },
+    "SplitToningHighlightSaturation": {
+      "id": "SplitToningHighlightSaturation",
+      "val": 0
+    },
+    "SplitToningBalance": {
+      "id": "SplitToningBalance",
+      "val": 0
+    },
+    "ColorGradeMidtoneHue": {
+      "id": "ColorGradeMidtoneHue",
+      "val": 46
+    },
+    "ColorGradeMidtoneSat": {
+      "id": "ColorGradeMidtoneSat",
+      "val": 0
+    },
+    "ColorGradeShadowLum": {
+      "id": "ColorGradeShadowLum",
+      "val": 0
+    },
+    "ColorGradeMidtoneLum": {
+      "id": "ColorGradeMidtoneLum",
+      "val": 0
+    },
+    "ColorGradeHighlightLum": {
+      "id": "ColorGradeHighlightLum",
+      "val": 0
+    },
+    "ColorGradeBlending": {
+      "id": "ColorGradeBlending",
+      "val": 50
+    },
+    "ColorGradeGlobalHue": {
+      "id": "ColorGradeGlobalHue",
+      "val": 0
+    },
+    "ColorGradeGlobalSat": {
+      "id": "ColorGradeGlobalSat",
+      "val": 0
+    },
+    "ColorGradeGlobalLum": {
+      "id": "ColorGradeGlobalLum",
+      "val": 0
+    },
+    "AutoLateralCA": {
+      "id": "AutoLateralCA",
+      "val": 1
+    },
+    "LensProfileEnable": {
+      "id": "LensProfileEnable",
+      "val": 1
+    },
+    "LensManualDistortionAmount": {
+      "id": "LensManualDistortionAmount",
+      "val": 0
+    },
+    "VignetteAmount": {
+      "id": "VignetteAmount",
+      "val": 0
+    },
+    "DefringePurpleAmount": {
+      "id": "DefringePurpleAmount",
+      "val": 0
+    },
+    "DefringePurpleHueLo": {
+      "id": "DefringePurpleHueLo",
+      "val": 30
+    },
+    "DefringePurpleHueHi": {
+      "id": "DefringePurpleHueHi",
+      "val": 70
+    },
+    "DefringeGreenAmount": {
+      "id": "DefringeGreenAmount",
+      "val": 0
+    },
+    "DefringeGreenHueLo": {
+      "id": "DefringeGreenHueLo",
+      "val": 40
+    },
+    "DefringeGreenHueHi": {
+      "id": "DefringeGreenHueHi",
+      "val": 60
+    },
+    "PerspectiveUpright": {
+      "id": "PerspectiveUpright",
+      "val": "Off"
+    },
+    "PerspectiveVertical": {
+      "id": "PerspectiveVertical",
+      "val": 0
+    },
+    "PerspectiveHorizontal": {
+      "id": "PerspectiveHorizontal",
+      "val": 0
+    },
+    "PerspectiveRotate": {
+      "id": "PerspectiveRotate",
+      "val": 0.0
+    },
+    "PerspectiveAspect": {
+      "id": "PerspectiveAspect",
+      "val": 0
+    },
+    "PerspectiveScale": {
+      "id": "PerspectiveScale",
+      "val": 100
+    },
+    "PerspectiveX": {
+      "id": "PerspectiveX",
+      "val": 0.00
+    },
+    "PerspectiveY": {
+      "id": "PerspectiveY",
+      "val": 0.00
+    },
+    "GrainAmount": {
+      "id": "GrainAmount",
+      "val": 0
+    },
+    "PostCropVignetteAmount": {
+      "id": "PostCropVignetteAmount",
+      "val": 0
+    },
+    "ShadowTint": {
+      "id": "ShadowTint",
+      "val": "+5"
+    },
+    "RedHue": {
+      "id": "RedHue",
+      "val": "+22"
+    },
+    "RedSaturation": {
+      "id": "RedSaturation",
+      "val": 0
+    },
+    "GreenHue": {
+      "id": "GreenHue",
+      "val": "+30"
+    },
+    "GreenSaturation": {
+      "id": "GreenSaturation",
+      "val": 0
+    },
+    "BlueHue": {
+      "id": "BlueHue",
+      "val": -23
+    },
+    "BlueSaturation": {
+      "id": "BlueSaturation",
+      "val": 0
+    },
+    "HDREditMode": {
+      "id": "HDREditMode",
+      "val": 0
+    },
+    "CurveRefineSaturation": {
+      "id": "CurveRefineSaturation",
+      "val": 100
+    },
+    "OverrideLookVignette": {
+      "id": "OverrideLookVignette",
+      "val": false
+    },
+    "ToneCurveName2012": {
+      "id": "ToneCurveName2012",
+      "val": "Custom"
+    },
+    "CameraProfile": {
+      "id": "CameraProfile",
+      "val": "Adobe Standard v2"
+    },
+    "CameraProfileDigest": {
+      "id": "CameraProfileDigest",
+      "val": "4038331422D6DC519DEE08C1C0D27B0E"
+    },
+    "LensProfileSetup": {
+      "id": "LensProfileSetup",
+      "val": "Custom"
+    },
+    "LensProfileName": {
+      "id": "LensProfileName",
+      "val": "Adobe (Nikon AF-S NIKKOR 24-70mm f/2.8E ED VR)"
+    },
+    "LensProfileFilename": {
+      "id": "LensProfileFilename",
+      "val": "NIKON D3 (Nikon AF-S NIKKOR 24-70mm f2.8E ED VR) - RAW.lcp"
+    },
+    "LensProfileDigest": {
+      "id": "LensProfileDigest",
+      "val": "2E8FA087DC87CEF0176F10762AB8D1AE"
+    },
+    "LensProfileIsEmbedded": {
+      "id": "LensProfileIsEmbedded",
+      "val": false
+    },
+    "LensProfileDistortionScale": {
+      "id": "LensProfileDistortionScale",
+      "val": 100
+    },
+    "LensProfileVignettingScale": {
+      "id": "LensProfileVignettingScale",
+      "val": 100
+    },
+    "HasSettings": {
+      "id": "HasSettings",
+      "val": true
+    },
+    "CropTop": {
+      "id": "CropTop",
+      "val": 0.075266
+    },
+    "CropLeft": {
+      "id": "CropLeft",
+      "val": 0
+    },
+    "CropBottom": {
+      "id": "CropBottom",
+      "val": 0.973157
+    },
+    "CropRight": {
+      "id": "CropRight",
+      "val": 0.897891
+    },
+    "CropAngle": {
+      "id": "CropAngle",
+      "val": 0
+    },
+    "CropConstrainToWarp": {
+      "id": "CropConstrainToWarp",
+      "val": 0
+    },
+    "CropConstrainToUnitSquare": {
+      "id": "CropConstrainToUnitSquare",
+      "val": 1
+    },
+    "HasCrop": {
+      "id": "HasCrop",
+      "val": true
+    },
+    "AlreadyApplied": {
+      "id": "AlreadyApplied",
+      "val": true
+    },
+    "ToneCurvePV2012": {
+      "id": "ToneCurvePV2012",
+      "val": ["0, 0","48, 39","117, 135","139, 159","255, 237"]
+    },
+    "ToneCurvePV2012Red": {
+      "id": "ToneCurvePV2012Red",
+      "val": ["0, 0","255, 255"]
+    },
+    "ToneCurvePV2012Green": {
+      "id": "ToneCurvePV2012Green",
+      "val": ["0, 0","255, 255"]
+    },
+    "ToneCurvePV2012Blue": {
+      "id": "ToneCurvePV2012Blue",
+      "val": ["0, 0","255, 255"]
+    },
+    "PointColors": {
+      "id": "PointColors",
+      "val": ["-1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000"]
+    },
+    "MaskGroupBasedCorrections": {
+      "id": "MaskGroupBasedCorrections",
+      "val": [{
+        "CorrectionActive": true,
+        "CorrectionAmount": 1,
+        "CorrectionMasks": [{
+          "FullMaskSize": "2886,1920",
+          "InputDigest": "96078B9E52C1B0F9371C24297D99E90F",
+          "InputDigestVersion": 2,
+          "MaskActive": true,
+          "MaskBlendMode": 0,
+          "MaskDigest": "2721EC1DB65423B1AFD2A72EBF772515",
+          "MaskInverted": false,
+          "MaskName": "Background",
+          "MaskSubCategoryID": 22,
+          "MaskSubType": 0,
+          "MaskSyncID": "E15C71ED45824CA7BCAAF76BE2FF2C7F",
+          "MaskValue": 1,
+          "MaskVersion": 1,
+          "ModelVersion": 251659306,
+          "Origin": "0,0",
+          "ReferencePoint": "0.851655 0.218687",
+          "What": "Mask/Image",
+          "WholeImageArea": "0/1073741824,0/1073741824,62914560/32768,94568448/32768"
+        }],
+        "CorrectionName": "Mask 1",
+        "CorrectionSyncID": "50D9DD1267DB4FEDA7392C71C0357676",
+        "LocalBlacks2012": 0,
+        "LocalBrightness": 0,
+        "LocalClarity": 0,
+        "LocalClarity2012": 0,
+        "LocalContrast": 0,
+        "LocalContrast2012": 0,
+        "LocalCorrectedDepth": 0,
+        "LocalCurveRefineSaturation": 100,
+        "LocalDefringe": 0,
+        "LocalDehaze": 0,
+        "LocalExposure": 0,
+        "LocalExposure2012": -0.13,
+        "LocalGrain": 0,
+        "LocalHighlights2012": 0,
+        "LocalHue": 0,
+        "LocalLuminanceNoise": 0,
+        "LocalMoire": 0,
+        "LocalSaturation": 0,
+        "LocalShadows2012": -0.282454,
+        "LocalSharpness": 0,
+        "LocalTemperature": 0,
+        "LocalTexture": 0,
+        "LocalTint": 0,
+        "LocalToningHue": 0,
+        "LocalToningSaturation": 0,
+        "LocalWhites2012": 0.136025,
+        "What": "Correction"
+      },{
+        "CorrectionActive": true,
+        "CorrectionAmount": 1,
+        "CorrectionMasks": [{
+          "FullMaskSize": "2886,1920",
+          "InputDigest": "96078B9E52C1B0F9371C24297D99E90F",
+          "InputDigestVersion": 2,
+          "InstanceBounds": [{
+            "Bottom": 0.595833,
+            "Left": 0,
+            "Right": 0.745322,
+            "Top": 0
+          },{
+            "Bottom": 0.931771,
+            "Left": 0,
+            "Right": 0.79106,
+            "Top": 0.425
+          }],
+          "InstanceIDs": [{
+            "InstanceID": 0
+          }],
+          "LocalInputDigest": "C45892A3805BC460DA70C37EC6B0939D",
+          "LocalInputDigestVersion": 1,
+          "MaskActive": true,
+          "MaskBlendMode": 0,
+          "MaskDigest": "8DC2EC4932A7820EB922A6665BC28C76",
+          "MaskInverted": false,
+          "MaskName": "Iris and Pupil",
+          "MaskSubCategoryID": 3,
+          "MaskSubType": 0,
+          "MaskSyncID": "3CB7E54E314E42DDAF9249DE66E924C5",
+          "MaskValue": 1,
+          "MaskVersion": 1,
+          "ModelVersion": 234881976,
+          "Origin": "1903,655",
+          "ReferencePoint": "0.670683 0.399153",
+          "What": "Mask/Image",
+          "WholeImageArea": "0/1,0/1,1920/1,2886/1"
+        }],
+        "CorrectionName": "Mask 2",
+        "CorrectionSyncID": "19053678BEC44373A2E0AC5D691E884C",
+        "LocalBlacks2012": 0,
+        "LocalBrightness": 0,
+        "LocalClarity": 0,
+        "LocalClarity2012": 0.069619,
+        "LocalContrast": 0,
+        "LocalContrast2012": 0,
+        "LocalCorrectedDepth": 0,
+        "LocalCurveRefineSaturation": 100,
+        "LocalDefringe": 0,
+        "LocalDehaze": 0,
+        "LocalExposure": 0,
+        "LocalExposure2012": 0.02,
+        "LocalGrain": 0,
+        "LocalHighlights2012": 0,
+        "LocalHue": 0,
+        "LocalLuminanceNoise": 0,
+        "LocalMoire": 0,
+        "LocalSaturation": 0.021503,
+        "LocalShadows2012": 0,
+        "LocalSharpness": 0,
+        "LocalTemperature": 0,
+        "LocalTexture": 0,
+        "LocalTint": 0,
+        "LocalToningHue": 0,
+        "LocalToningSaturation": 0,
+        "LocalWhites2012": 0,
+        "What": "Correction"
+      },{
+        "CorrectionActive": true,
+        "CorrectionAmount": 1,
+        "CorrectionMasks": [{
+          "FullMaskSize": "2886,1920",
+          "InputDigest": "96078B9E52C1B0F9371C24297D99E90F",
+          "InputDigestVersion": 2,
+          "InstanceBounds": [{
+            "Bottom": 0.595833,
+            "Left": 0,
+            "Right": 0.745322,
+            "Top": 0
+          },{
+            "Bottom": 0.931771,
+            "Left": 0,
+            "Right": 0.79106,
+            "Top": 0.425
+          }],
+          "InstanceIDs": [{
+            "InstanceID": 0
+          }],
+          "LocalInputDigest": "C45892A3805BC460DA70C37EC6B0939D",
+          "LocalInputDigestVersion": 1,
+          "MaskActive": true,
+          "MaskBlendMode": 0,
+          "MaskDigest": "DA85002A0722E5E52C2F913436C3CE0E",
+          "MaskInverted": false,
+          "MaskName": "Eye Sclera",
+          "MaskSubCategoryID": 8,
+          "MaskSubType": 0,
+          "MaskSyncID": "61CCB62D7D764C83AED9AC4097A46AD7",
+          "MaskValue": 1,
+          "MaskVersion": 1,
+          "ModelVersion": 234881976,
+          "Origin": "1902,650",
+          "ReferencePoint": "0.663879 0.355510",
+          "What": "Mask/Image",
+          "WholeImageArea": "0/1,0/1,1920/1,2886/1"
+        }],
+        "CorrectionName": "Mask 3",
+        "CorrectionSyncID": "C50E46D64D6543D4B7E0D6C613D3BDE0",
+        "LocalBlacks2012": 0,
+        "LocalBrightness": 0,
+        "LocalClarity": 0,
+        "LocalClarity2012": 0,
+        "LocalContrast": 0,
+        "LocalContrast2012": 0,
+        "LocalCorrectedDepth": 0,
+        "LocalCurveRefineSaturation": 100,
+        "LocalDefringe": 0,
+        "LocalDehaze": 0,
+        "LocalExposure": 0,
+        "LocalExposure2012": 0,
+        "LocalGrain": 0,
+        "LocalHighlights2012": 0,
+        "LocalHue": 0,
+        "LocalLuminanceNoise": 0,
+        "LocalMoire": 0,
+        "LocalSaturation": 0,
+        "LocalShadows2012": 0,
+        "LocalSharpness": 0,
+        "LocalTemperature": 0,
+        "LocalTexture": 0,
+        "LocalTint": 0,
+        "LocalToningHue": 0,
+        "LocalToningSaturation": 0,
+        "LocalWhites2012": 0.262741,
+        "What": "Correction"
+      },{
+        "CorrectionActive": true,
+        "CorrectionAmount": 1,
+        "CorrectionMasks": [{
+          "FullMaskSize": "2886,1920",
+          "InputDigest": "96078B9E52C1B0F9371C24297D99E90F",
+          "InputDigestVersion": 2,
+          "InstanceBounds": [{
+            "Bottom": 0.595833,
+            "Left": 0,
+            "Right": 0.745322,
+            "Top": 0
+          },{
+            "Bottom": 0.931771,
+            "Left": 0,
+            "Right": 0.79106,
+            "Top": 0.425
+          }],
+          "InstanceIDs": [{
+            "InstanceID": 1
+          }],
+          "LocalInputDigest": "C45892A3805BC460DA70C37EC6B0939D",
+          "LocalInputDigestVersion": 1,
+          "MaskActive": true,
+          "MaskBlendMode": 0,
+          "MaskDigest": "B90DBB606712DD611BC3D8F727DD8C8F",
+          "MaskInverted": false,
+          "MaskName": "Clothes",
+          "MaskSubCategoryID": 11,
+          "MaskSubType": 0,
+          "MaskSyncID": "6312CD59E4AB4CA790C6DA2E95C33210",
+          "MaskValue": 1,
+          "MaskVersion": 1,
+          "ModelVersion": 234881976,
+          "Origin": "0,826",
+          "ReferencePoint": "0.233958 0.661451",
+          "What": "Mask/Image",
+          "WholeImageArea": "0/1,0/1,1920/1,2886/1"
+        }],
+        "CorrectionName": "Mask 4",
+        "CorrectionSyncID": "5515E30E776242F59E2A7ED86CAF18C8",
+        "LocalBlacks2012": -0.137485,
+        "LocalBrightness": 0,
+        "LocalClarity": 0,
+        "LocalClarity2012": 0,
+        "LocalContrast": 0,
+        "LocalContrast2012": 0,
+        "LocalCorrectedDepth": 0,
+        "LocalCurveRefineSaturation": 100,
+        "LocalDefringe": 0,
+        "LocalDehaze": 0,
+        "LocalExposure": 0,
+        "LocalExposure2012": 0,
+        "LocalGrain": 0,
+        "LocalHighlights2012": 0,
+        "LocalHue": 0,
+        "LocalLuminanceNoise": 0,
+        "LocalMoire": 0,
+        "LocalSaturation": 0,
+        "LocalShadows2012": 0,
+        "LocalSharpness": 0,
+        "LocalTemperature": 0,
+        "LocalTexture": 0,
+        "LocalTint": 0,
+        "LocalToningHue": 0,
+        "LocalToningSaturation": 0,
+        "LocalWhites2012": 0.10357,
+        "What": "Correction"
+      },{
+        "CorrectionActive": true,
+        "CorrectionAmount": 1,
+        "CorrectionMasks": [{
+          "FullMaskSize": "2886,1920",
+          "InputDigest": "96078B9E52C1B0F9371C24297D99E90F",
+          "InputDigestVersion": 2,
+          "LocalInputDigest": "C45892A3805BC460DA70C37EC6B0939D",
+          "LocalInputDigestVersion": 1,
+          "MaskActive": true,
+          "MaskBlendMode": 0,
+          "MaskDigest": "BE0C45A774496C7BF1FFD755C9B381BA",
+          "MaskInverted": false,
+          "MaskName": "All People - Facial Skin",
+          "MaskSubCategoryID": 2,
+          "MaskSubType": 3,
+          "MaskSyncID": "3820B50053A043529DC0AF7AEA2EF443",
+          "MaskValue": 1,
+          "MaskVersion": 1,
+          "ModelVersion": 234881976,
+          "Origin": "1705,570",
+          "ReferencePoint": "0.693059 0.370823",
+          "What": "Mask/Image",
+          "WholeImageArea": "0/1,0/1,1920/1,2886/1"
+        },{
+          "FullMaskSize": "2886,1920",
+          "InputDigest": "96078B9E52C1B0F9371C24297D99E90F",
+          "InputDigestVersion": 2,
+          "LocalInputDigest": "C45892A3805BC460DA70C37EC6B0939D",
+          "LocalInputDigestVersion": 1,
+          "MaskActive": true,
+          "MaskBlendMode": 0,
+          "MaskDigest": "2C83212BBFF7076193BBF8946B80BF7E",
+          "MaskInverted": false,
+          "MaskName": "All People - Body Skin",
+          "MaskSubCategoryID": 4,
+          "MaskSubType": 3,
+          "MaskSyncID": "3EC891B2FF78473F811BE6DE3FB3228A",
+          "MaskValue": 1,
+          "MaskVersion": 1,
+          "ModelVersion": 234881976,
+          "Origin": "968,308",
+          "ReferencePoint": "0.491263 0.235001",
+          "What": "Mask/Image",
+          "WholeImageArea": "0/1,0/1,1920/1,2886/1"
+        },{
+          "FullMaskSize": "2886,1920",
+          "InputDigest": "96078B9E52C1B0F9371C24297D99E90F",
+          "InputDigestVersion": 2,
+          "LocalInputDigest": "C45892A3805BC460DA70C37EC6B0939D",
+          "LocalInputDigestVersion": 1,
+          "MaskActive": true,
+          "MaskBlendMode": 0,
+          "MaskDigest": "43B8F9CAD8324B8DBBF62755051CB00C",
+          "MaskInverted": false,
+          "MaskName": "All People - Clothes",
+          "MaskSubCategoryID": 11,
+          "MaskSubType": 3,
+          "MaskSyncID": "E02BDCA3C4BE4194BC9EE1AA02A1FB30",
+          "MaskValue": 1,
+          "MaskVersion": 1,
+          "ModelVersion": 234881976,
+          "Origin": "0,0",
+          "ReferencePoint": "0.141428 0.333642",
+          "What": "Mask/Image",
+          "WholeImageArea": "0/1,0/1,1920/1,2886/1"
+        }],
+        "CorrectionName": "Mask 5",
+        "CorrectionSyncID": "22E495F862A941DF83ADED0D227B671C",
+        "LocalBlacks2012": 0,
+        "LocalBrightness": 0,
+        "LocalClarity": 0,
+        "LocalClarity2012": 0,
+        "LocalContrast": 0,
+        "LocalContrast2012": 0,
+        "LocalCorrectedDepth": 0,
+        "LocalCurveRefineSaturation": 100,
+        "LocalDefringe": 0,
+        "LocalDehaze": 0,
+        "LocalExposure": 0,
+        "LocalExposure2012": 0,
+        "LocalGrain": 0,
+        "LocalHighlights2012": -0.492443,
+        "LocalHue": 0,
+        "LocalLuminanceNoise": 0,
+        "LocalMoire": 0,
+        "LocalSaturation": 0,
+        "LocalShadows2012": 0,
+        "LocalSharpness": 0,
+        "LocalTemperature": 0,
+        "LocalTexture": 0,
+        "LocalTint": 0,
+        "LocalToningHue": 0,
+        "LocalToningSaturation": 0,
+        "LocalWhites2012": 0,
+        "What": "Correction"
+      }]
+    },
+    "Look": {
+      "id": "Look",
+      "val": {
+        "Amount": 0.24,
+        "Cluster": "Adobe",
+        "Group": "Modern",
+        "Name": "Modern 08",
+        "Parameters": {
+          "ConvertToGrayscale": false,
+          "LookTable": "E1095149FDB39D7A057BAB208837E2E1",
+          "ProcessVersion": 15.4,
+          "RGBTable": "6133E9CB13FA32712A5AC579D110EC44",
+          "RGBTableAmount": 0.75,
+          "Version": 17.5
+        },
+        "SupportsMonochrome": false,
+        "UUID": "DA1C3775662D6B6A75F8BC2CEEB3724A"
+      }
+    }
+  },
+  "APP14:Adobe": {
+    "DCTEncodeVersion": {
+      "id": 0,
+      "val": 100
+    },
+    "APP14Flags0": {
+      "id": 1,
+      "val": "[14], Encoded with Blend=1 downsampling"
+    },
+    "APP14Flags1": {
+      "id": 2,
+      "val": "(none)"
+    },
+    "ColorTransform": {
+      "id": 3,
+      "val": "YCbCr"
+    }
+  },
+  "Composite": {
+    "Aperture": {
+      "id": "Exif-Aperture",
+      "val": 2.8
+    },
+    "ImageSize": {
+      "id": "Exif-ImageSize",
+      "val": "3613x5430"
+    },
+    "Megapixels": {
+      "id": "Exif-Megapixels",
+      "val": 19.6
+    },
+    "ScaleFactor35efl": {
+      "id": "Exif-ScaleFactor35efl",
+      "val": 1.0
+    },
+    "ShutterSpeed": {
+      "id": "Exif-ShutterSpeed",
+      "val": "1/400"
+    },
+    "SubSecCreateDate": {
+      "id": "Exif-SubSecCreateDate",
+      "val": "2025:09:06 11:12:41.56+02:00"
+    },
+    "SubSecDateTimeOriginal": {
+      "id": "Exif-SubSecDateTimeOriginal",
+      "val": "2025:09:06 11:12:41.56+02:00"
+    },
+    "SubSecModifyDate": {
+      "id": "Exif-SubSecModifyDate",
+      "val": "2025:09:15 01:18:01+02:00"
+    },
+    "DateTimeCreated": {
+      "id": "IPTC-DateTimeCreated",
+      "val": "2025:09:06 11:12:41+02:00"
+    },
+    "DigitalCreationDateTime": {
+      "id": "IPTC-DigitalCreationDateTime",
+      "val": "2025:09:06 11:12:41+02:00"
+    },
+    "CircleOfConfusion": {
+      "id": "Exif-CircleOfConfusion",
+      "val": "0.030 mm"
+    },
+    "FOV": {
+      "id": "Exif-FOV",
+      "val": "29.2 deg"
+    },
+    "FocalLength35efl": {
+      "id": "Exif-FocalLength35efl",
+      "val": "69.0 mm (35 mm equivalent: 69.0 mm)"
+    },
+    "HyperfocalDistance": {
+      "id": "Exif-HyperfocalDistance",
+      "val": "56.59 m"
+    },
+    "LightValue": {
+      "id": "Exif-LightValue",
+      "val": 10.6
+    },
+    "LensID": {
+      "id": "Exif-LensID-2",
+      "val": "NIKKOR Z 24-70mm f/2.8 S"
+    }
+  }
+}]

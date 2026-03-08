@@ -1,61 +1,30 @@
-import re
-from typing import Dict
+from typing import Dict, List
 import copy
+
+import jsonpath
 
 from glom import glom, PathAccessError, assign
 
 from domain.metadata.metadata_group_0 import MetadataGroup0
-from domain.metadata.metadata_id import MetadataId, PathArray, PathStruct
+from domain.metadata.metadata_id import MetadataId
+from indexing.domain.searched_tags_result import SearchedTagsResult
 
 VIEW_G0_ORDERING = [MetadataGroup0.FILE, MetadataGroup0.EXIF]
 
 
-def index_to_ui_view(index_data: Dict, ordering: [MetadataId]) -> Dict:
-    """
-    Transforms index (db format) to view
-    :param index_data:
-    :return:
-    """
-    view = {}
-    for g0_name, g0_data in index_data.items():
-        g0_data_new = {}
-        g0_tags = g0_data.get("tags")
-        if g0_tags is not None:
-            g0_data_new["-"] = copy.deepcopy(g0_tags)
-        g1_data = g0_data.get("g1")
-        if g1_data is not None:
-            for g1_name, g1_tags in g1_data.items():
-                g0_data_new[g1_name] = copy.deepcopy(g1_tags)
-        view[g0_name] = g0_data_new
+def search_index_value(search_result: SearchedTagsResult|None, index_data: Dict, metadata_id: MetadataId, strict_g1: bool, strict_path: bool) -> SearchedTagsResult:
+    if search_result is None:
+        search_result = SearchedTagsResult()
 
-    # Create __order field
-    for order_metadata_id in ordering:
-        if order_metadata_id.group_0 is None:
-            continue
-        elif order_metadata_id.group_1 is None and order_metadata_id.group_0 in view:
-            g0_order = view.get("__order")
-            if g0_order is None:
-                g0_order = []
-                view["__order"] = g0_order
-            g0_order.append(order_metadata_id.group_0)
-        elif order_metadata_id.group_0 in view and order_metadata_id.group_1 in view.get(order_metadata_id.group_0):
-            g1_order = view.get(order_metadata_id.group_0).get("__order")
-            if g1_order is None:
-                g1_order = []
-                view.get(order_metadata_id.group_0)["__order"] = g1_order
-            g1_order.append(order_metadata_id.group_1)
-    return view
+    json_paths = metadata_id.get_json_paths(strict_g1, strict_path)
+    search_items = [item for path in json_paths for item in jsonpath.query(path, index_data).items()]
 
-def search_index_value(index_data: Dict, metadata_id: MetadataId):
-    """
-    Exact search in index.
-    If g1 is not filled, searches only g0.
-    If path is not filled, it searches only the root tag.
-    """
-    glom_path = metadata_id.get_glom_path()
-    # Convert Array[0] syntax to Array.0 for glom compatibility
-    converted_path = _convert_array_syntax_to_glom(glom_path)
-    return glom(index_data, converted_path)
+    for search_item in search_items:
+        searched_path = search_item[0]
+        searched_value = search_item[1]
+        search_result.add_result(metadata_id, MetadataId.from_json_path(searched_path), searched_value)
+
+    return search_result
 
 
 def set_index_value(index_data: Dict, metadata_id: MetadataId, value):
@@ -87,7 +56,7 @@ def set_index_value(index_data: Dict, metadata_id: MetadataId, value):
 
     for i, part in enumerate(path_list):
         is_last = i == len(path_list) - 1
-        if isinstance(part, PathStruct):
+        if isinstance(part, "PathStruct"):
             key_path = f"{current_path}.{part.struct_name}"
             try:
                 glom(index_data, key_path)
@@ -137,10 +106,3 @@ def set_index_value(index_data: Dict, metadata_id: MetadataId, value):
 
     assign(index_data, current_path, value)
 
-
-def _convert_array_syntax_to_glom(path: str) -> str:
-    """Convert Array[0] syntax to Array.0 for glom compatibility."""
-    # Pattern to match KeyName[index] and replace with KeyName.index
-    # Matches any characters (non-greedy) before [number]
-    list_index_pattern = re.compile(r'([^.\[]+)\[(\d+)\]')
-    return list_index_pattern.sub(r'\1.\2', path)

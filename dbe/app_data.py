@@ -6,6 +6,9 @@ from sqlalchemy.orm import mapped_column, Mapped, Session
 from database import Base
 from domain.app_data_field import AppDataField
 
+# TODO add cache
+app_data_cache = {}
+app_data_cache_time_sec = 360
 
 class AppData(Base):
     __tablename__ = "app_data"
