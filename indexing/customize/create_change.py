@@ -1,7 +1,5 @@
 from typing import Dict, Any
 
-from glom import glom, PathAccessError
-
 from domain.metadata.metadata_id import MetadataId
 from indexing.customize.index_change import IndexChange
 from indexing.domain.index_change_status import IndexChangeValidationStatus
@@ -18,11 +16,11 @@ class CreateChange(IndexChange):
         set_index_value(effective_json, self.metadata_id, self.value)
 
     def validate(self, exif_json: Dict) -> IndexChangeValidationStatus:
-        try:
-            result = search_index_value(exif_json, self.metadata_id)
-        except PathAccessError as ex:
+        result = search_index_value(None, exif_json, self.metadata_id, strict_g1=True, strict_path=True)
+        found = result.get_first_value(self.metadata_id)
+        if found.searched_tag is None:
             return IndexChangeValidationStatus.NOT_CREATED
-        if result == self.value:
+        if found.value == self.value:
             return IndexChangeValidationStatus.CREATED
         return IndexChangeValidationStatus.EXISTS_DIFF_VALUE
 

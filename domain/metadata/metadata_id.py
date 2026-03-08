@@ -21,7 +21,7 @@ class MetadataId:
 
     def get_key(self):
         group_1_key = putils.coalesce(self.group_1, "")
-        path_key = putils.coalesce(self.group_1, "")
+        path_key = putils.coalesce(self.path, "")
         name_key = putils.coalesce(self.tag_name, "")
         id_key = putils.coalesce(self.tag_id, "")
         return f"{self.group_0}:{group_1_key}:{path_key}:{name_key}:{id_key}"
@@ -84,6 +84,26 @@ class MetadataId:
         path = "." + ".".join(path_segments) if path_segments else None
         return MetadataId(group_0, group_1, tag_name, metadata_id=tag_id, path=path)
 
+    def get_json_pointer(self) -> str:
+        """Build a JSON Pointer (RFC 6901) for this fully-resolved MetadataId.
+
+        Requires tag_name and tag_id to be set. Path segments must already be
+        in 'name@id' format (as produced by from_json_path); user-provided
+        plain-name paths will not resolve correctly for add operations.
+        """
+        def escape(s: str) -> str:
+            return s.replace("~", "~0").replace("/", "~1")
+
+        parts = [escape(self.group_0)]
+        if self.group_1 is not None:
+            parts += ["g1", escape(self.group_1)]
+        else:
+            parts.append("tags")
+        if self.path:
+            parts += [escape(s) for s in self.path.strip(".").split(".") if s]
+        parts.append(escape(f"{self.tag_name}{TAG_ID_DELIMITER}{self.tag_id}"))
+        return "/" + "/".join(parts)
+
     def to_dict(self):
         d = {"g0": self.group_0}
         putils.add_if_not_none(d, "g1", self.group_1)
@@ -95,7 +115,7 @@ class MetadataId:
     @staticmethod
     def from_dict(d: dict) -> "MetadataId":
         """Deserialize from dict produced by to_dict()."""
-        return MetadataId(d.get("g0"), d.get("g1"), d.get("tag_name"), d.get("path"))
+        return MetadataId(d.get("g0"), d.get("g1"), d.get("tag_name"), metadata_id=d.get("tag_id"), path=d.get("path"))
 
     def __eq__(self, other):
         if not isinstance(other, MetadataId):
