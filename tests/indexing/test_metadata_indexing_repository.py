@@ -22,7 +22,6 @@ class TestMetadataIndexingRepository(BaseExifTest):
                     MetadataId("File", "System", None),
                     MetadataId("File", "NotExist", None)]
         ui_view = metadata_indexing_service.index_to_ui_view(self.exif_json, ordering)
-
         self.assertEqual(ui_view, self.ui_view)
 
 

@@ -39,11 +39,26 @@ class DocsExifToolTag(Base):
     user_created: Mapped[bool] = mapped_column(default=False)
 
 
+def find_by_tag_id(session: Session, tag_id: str) -> [DocsExifToolTag]:
+    return session.query(DocsExifToolTag).filter_by(exif_id=tag_id).all()
+
 def find_by_tag_name(session: Session, tag_name: str) -> [DocsExifToolTag]:
     return session.query(DocsExifToolTag).filter_by(name=tag_name).all()
 
 def find_by_field_name(session: Session, field_name: str) -> [DocsExifToolTag]:
     return session.query(DocsExifToolTag).filter_by(field_name=field_name).all()
+
+def find_by_field_name_and_parent(session: Session, field_name: str, parent_struct_id: Optional[UUID]) -> [DocsExifToolTag]:
+    q = session.query(DocsExifToolTag).filter_by(field_name=field_name)
+    if parent_struct_id is not None:
+        q = q.filter_by(parent_struct_id=parent_struct_id)
+    return q.all()
+
+def find_by_tag_name_and_parent(session: Session, tag_name: str, parent_struct_id: Optional[UUID]) -> [DocsExifToolTag]:
+    q = session.query(DocsExifToolTag).filter_by(name=tag_name)
+    if parent_struct_id is not None:
+        q = q.filter_by(parent_struct_id=parent_struct_id)
+    return q.all()
 
 def find_by_group(session: Session, group_id: UUID):
     return session.query(DocsExifToolTag).filter_by(group_id=group_id).filter_by(deleted=False).filter_by(user_created=False).all()

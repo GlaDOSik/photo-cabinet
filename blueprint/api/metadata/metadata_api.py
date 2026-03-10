@@ -8,7 +8,7 @@ from blueprint.api.metadata.metadata_responses import PhotoMetadataIndex, Metada
 from blueprint.api.metadata.metadata_requests import GetPhotoMetadataRequest, MetadataInfoRequest, MetadataIdRequest
 from domain.metadata.metadata_sets import METADATA_UI_VIEW_ORDER
 from domain.metadata_index_type import MetadataIndexType
-from indexing import metadata_indexing_repository
+from indexing import metadata_indexing_repository, metadata_indexing_service
 from service import metadata_docs_service
 
 
@@ -55,5 +55,6 @@ def get_photo_metadata(request: Dict):
     else:
         abort(400)
 
-    # TODO Implement custom ordering
-    return PhotoMetadataIndex.to_resp(metadata_indexing_repository.index_to_ui_view(metadata_json, METADATA_UI_VIEW_ORDER))
+    # TODO Implement custom ordering using tag groups (they are already used for getting photo creation date and photo size)
+    # TODO Review ordering. Does it work only for g0 and g1? Or you can order also tags?
+    return PhotoMetadataIndex.to_resp(metadata_indexing_service.index_to_ui_view(metadata_json, METADATA_UI_VIEW_ORDER))

@@ -1,16 +1,17 @@
-from typing import Dict, List
+from typing import Dict
 from uuid import UUID
 
 from marshmallow import Schema, fields, validate, validates
 
-from domain.metadata.metadata_id import MetadataId, PathStruct, PathArray
+from domain.metadata.metadata_id import MetadataId
 from domain.metadata_index_type import MetadataIndexType
+
+_TAG_UI_DELIMITER = " / "
 
 
 class MetadataIdRequest(Schema):
-    ui_view_tag_path = fields.List(fields.Raw())  # str or int per element, only path
-    tag_name = fields.Str(required=False)
-    tag_value = fields.Str(required=False)
+    ui_view_tag_path = fields.List(fields.Raw())  # str or int per element
+    tag_value = fields.Raw(required=False)
 
     @validates("ui_view_tag_path")
     def validate_ui_view_tag_path(self, value, data_key):
@@ -23,22 +24,23 @@ class MetadataIdRequest(Schema):
     @staticmethod
     def get_metadata_id(request: Dict) -> MetadataId:
         tag_path = request.get("ui_view_tag_path")
-        g0 = None
-        g1 = None
-        path: List[PathStruct | PathArray] = []
-        for i, tag_path_part in enumerate(tag_path):
-            if i == 0:
-                g0 = tag_path_part
-            elif i == 1:
-                g1 = None if tag_path_part == "-" else tag_path_part
-            else:
-                if isinstance(tag_path_part, int):
-                    array_name = path[-1].struct_name
-                    path.pop()
-                    path.append(PathArray(array_name, tag_path_part))
-                else:
-                    path.append(PathStruct(tag_path_part))
-        return MetadataId(g0, g1, request.get("tag_name"), path)
+        g0 = tag_path[0]
+        g1 = None if tag_path[1] == "-" else tag_path[1] # TODO - there could be only g0 defined in req, this will raise IndexError
+        remaining = tag_path[2:]
+
+        if not remaining:
+            return MetadataId(g0, g1, None)
+
+        tag_specifier = str(remaining[-1])
+        path_nodes = remaining[:-1]
+
+        if _TAG_UI_DELIMITER in tag_specifier:
+            tag_name, tag_id = tag_specifier.split(_TAG_UI_DELIMITER, 1)
+        else:
+            tag_name, tag_id = tag_specifier, None
+
+        path = "." + ".".join(str(n) for n in path_nodes) if path_nodes else None
+        return MetadataId(g0, g1, tag_name, metadata_id=tag_id, path=path)
 
     @staticmethod
     def get_tag_value(request: Dict):

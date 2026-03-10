@@ -312,8 +312,8 @@ def _deep_copy_tags(tags: Dict | List):
 
             tag_name_split = tag_name.split(TAG_ID_DELIMITER)
 
-            if len(tag_name_split) > 1 and tag_name_split[0] != tag_name_split[1]:
-                new_tag_name = f"{tag_name_split[0]} : {tag_name_split[1]}"
+            if len(tag_name_split) > 1 and tag_name_split[0] != tag_name_split[1] and len(tag_name_split[1]) > 0:
+                new_tag_name = f"{tag_name_split[0]} / {tag_name_split[1]}"
             else:
                 new_tag_name = tag_name_split[0]
             result[new_tag_name] = tag_data_cp

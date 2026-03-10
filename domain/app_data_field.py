@@ -48,6 +48,8 @@ class AppDataField(Enum):
     FILE_METADATA_CACHE_VALIDITY_SEC = (auto(), int, 120)
     # Trigger if the metadata definitions and docs should be re-loaded again during initialization of the app
     LOAD_METADATA_DOCS = (auto(), bool, True)
+    # Root logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+    LOG_LEVEL = (auto(), str, "DEBUG")
 
     def __new__(cls, value, field_type, default_value):
         obj = object.__new__(cls)

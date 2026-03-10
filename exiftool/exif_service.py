@@ -31,7 +31,7 @@ def load_metadata_docs_from_csv(session: Session) -> None:
     tag_descriptions_path = os.path.join(METADATA_DOCS_DIR, "tag_descriptions.csv")
     values_path = os.path.join(METADATA_DOCS_DIR, "values.csv")
 
-    # TODO this takes a lot of time - around 70 seconds. Can we improve the performance? Would be also worth running analyze and full vacuum
+    # TODO this takes a lot of time - around 80 seconds. Can we improve the performance? Maybe by adding index to user_created? Would be also worth running analyze and full vacuum
     # Because without it, the table size doubles
     session.query(DocsExifToolValue).filter_by(user_created=False).delete(synchronize_session=False)
     session.query(DocsExifToolTag).filter_by(user_created=False).delete(synchronize_session=False)

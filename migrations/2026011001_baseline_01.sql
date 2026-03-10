@@ -66,6 +66,20 @@ CREATE TABLE public.task (
 );
 
 
+-- public.wiki_page definition
+
+-- Drop table
+
+-- DROP TABLE public.wiki_page;
+
+CREATE TABLE public.wiki_page (
+	id uuid NOT NULL,
+	updated timestamp NOT NULL,
+	md_content varchar NOT NULL,
+	CONSTRAINT wiki_page_pkey PRIMARY KEY (id)
+);
+
+
 -- public.docs_exif_tag definition
 
 -- Drop table
@@ -134,6 +148,7 @@ CREATE TABLE public.metadata_indexing_tag (
 	"order" int4 NOT NULL,
 	g0 varchar NULL,
 	g1 varchar NULL,
+	tag_id varchar NULL,
 	tag_name varchar NULL,
 	tag_path varchar NULL,
 	CONSTRAINT metadata_indexing_tag_pkey PRIMARY KEY (id),

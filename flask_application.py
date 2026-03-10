@@ -14,10 +14,22 @@ from blueprint.api.settings.settings_api import settings_api
 from database import DBSession
 
 from dbe import task_log, task, folder, photo, app_data
+from dbe.app_data import get_app_data_val
+from domain.app_data_field import AppDataField
 from indexing.dbe import metadata_index, metadata_indexing_group, metadata_indexing_tag
 from dbe.docs import docs_et_tag
 
 logger = logging.getLogger()
+
+
+def _apply_log_level():
+    session = DBSession()
+    try:
+        level = get_app_data_val(session, AppDataField.LOG_LEVEL)
+        logging.basicConfig(level=level, format="%(asctime)s - %(levelname)s - %(message)s")
+        logging.getLogger().setLevel(level)
+    finally:
+        session.close()
 
 
 def create_app():
@@ -28,6 +40,7 @@ def create_app():
     app.config["OPENAPI_URL_PREFIX"] = "/"
     app.config["OPENAPI_JSON_PATH"] = "openapi.json"
     register_blueprints(app)
+    _apply_log_level()
 
     @app.before_request
     def before_request():

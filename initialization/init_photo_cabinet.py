@@ -40,6 +40,11 @@ def initialize_exiftool(session) -> None:
     logger.info("Metadata docs loaded.")
 
 
+def apply_log_level(session) -> None:
+    level = get_app_data_val(session, AppDataField.LOG_LEVEL)
+    logging.getLogger().setLevel(level)
+
+
 def main():
     """
     Main initialization function.
@@ -54,6 +59,7 @@ def main():
     logger.info("Starting Photo Cabinet database initialization...")
     session = DBSession()
     try:
+        apply_log_level(session)
         initialize_start = time.time()
         initialize_exiftool(session)
         initialize_end = time.time()
