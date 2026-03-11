@@ -1,17 +1,15 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import TYPE_CHECKING, Optional, List
+from typing import Optional, List
 from uuid import UUID, uuid4
-
-if TYPE_CHECKING:
-    from indexing.dbe.metadata_cache import MetadataCache
 
 from sqlalchemy import ForeignKey
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship, Session
 
 from database import Base
+from indexing.dbe.metadata_cache import MetadataCache
 
 
 class MetadataIndex(Base):
@@ -36,7 +34,7 @@ class MetadataIndex(Base):
     use_thumbnail: Mapped[bool] = mapped_column(default=False)
     preview_color_hex: Mapped[Optional[str]]
 
-    cache: Mapped[Optional["MetadataCache"]] = relationship(lazy="select")
+    cache: Mapped[Optional[MetadataCache]] = relationship(lazy="select")
 
 def find_by_photo_id(session: Session, photo_id: UUID):
     return session.query(MetadataIndex).filter_by(photo_id=photo_id).first()

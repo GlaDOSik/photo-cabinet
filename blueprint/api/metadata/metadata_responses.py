@@ -1,4 +1,5 @@
 from typing import Dict
+from uuid import UUID
 
 from marshmallow import Schema, fields
 
@@ -14,6 +15,14 @@ class PhotoMetadataIndex(Schema):
     @staticmethod
     def to_resp(ui_view: Dict) -> Dict:
         return {"ui_view": ui_view}
+
+
+class LiveMetadataPendingResponse(Schema):
+    task_id = fields.Str(required=True)
+
+    @staticmethod
+    def to_resp(task_id: UUID) -> dict:
+        return {"task_id": str(task_id)}
 
 
 class MetadataInfoResponse(Schema):

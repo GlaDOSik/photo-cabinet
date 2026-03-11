@@ -3,12 +3,15 @@ from typing import Dict
 from flask import g, abort
 from flask_smorest import Blueprint
 
+from dbe.app_data import get_app_data_val
 from dbe.photo import find_by_id as find_photo_by_id
-from blueprint.api.metadata.metadata_responses import PhotoMetadataIndex, MetadataInfoResponse
+from blueprint.api.metadata.metadata_responses import LiveMetadataPendingResponse, PhotoMetadataIndex, MetadataInfoResponse
 from blueprint.api.metadata.metadata_requests import GetPhotoMetadataRequest, MetadataInfoRequest, MetadataIdRequest
+from domain.app_data_field import AppDataField
 from domain.metadata.metadata_sets import METADATA_UI_VIEW_ORDER
 from domain.metadata_index_type import MetadataIndexType
 from indexing import metadata_indexing_repository, metadata_indexing_service
+from indexing.metadata_indexing_facade import get_or_submit_live_cache
 from service import metadata_docs_service
 
 
@@ -29,6 +32,7 @@ def get_metadata_info(request: Dict):
 @metadata_api.route("/photo", methods=["POST"])
 @metadata_api.arguments(GetPhotoMetadataRequest, location="json")
 @metadata_api.response(200, PhotoMetadataIndex)
+@metadata_api.alt_response(202, schema=LiveMetadataPendingResponse, success=True)
 @metadata_api.alt_response(404)
 @metadata_api.alt_response(400)
 def get_photo_metadata(request: Dict):
@@ -37,21 +41,27 @@ def get_photo_metadata(request: Dict):
         metadata_type = GetPhotoMetadataRequest.get_type(request)
     except (ValueError, KeyError):
         abort(400)
-    
+
     transaction_session = getattr(g, "transaction_session", None)
     photo = find_photo_by_id(transaction_session, photo_uuid)
     if photo is None:
         abort(404)
-    
+
     if photo.metadata_index is None:
         abort(404)
-    
+
     if metadata_type == MetadataIndexType.EXIF:
         metadata_json = photo.metadata_index.exif_json
     elif metadata_type == MetadataIndexType.EFFECTIVE:
         metadata_json = photo.metadata_index.effective_json
         if metadata_json is None:
             metadata_json = photo.metadata_index.exif_json
+    elif metadata_type == MetadataIndexType.LIVE:
+        ttl_sec = get_app_data_val(transaction_session, AppDataField.FILE_METADATA_CACHE_VALIDITY_SEC)
+        full_json, task_id = get_or_submit_live_cache(transaction_session, photo, ttl_sec)
+        if task_id is not None:
+            return LiveMetadataPendingResponse.to_resp(task_id), 202
+        return PhotoMetadataIndex.to_resp(metadata_indexing_service.index_to_ui_view(full_json, METADATA_UI_VIEW_ORDER))
     else:
         abort(400)
 
