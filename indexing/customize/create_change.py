@@ -8,7 +8,7 @@ from indexing.metadata_indexing_repository import search_index_value, set_index_
 
 
 class CreateChange(IndexChange):
-    def __init__(self, value: str, metadata_id: MetadataId):
+    def __init__(self, value: Any, metadata_id: MetadataId):
         super().__init__(IndexChangeType.CREATE, metadata_id)
         self.value = value
 

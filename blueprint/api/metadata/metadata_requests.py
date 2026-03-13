@@ -55,6 +55,14 @@ class MetadataInfoRequest(Schema):
         return request.get("metadata_id")
 
 
+class GetPhotoChangesRequest(Schema):
+    photo_id = fields.Str(required=True, load_only=True)
+
+    @staticmethod
+    def get_photo_id(request: Dict) -> UUID:
+        return UUID(request.get("photo_id"))
+
+
 class GetPhotoMetadataRequest(Schema):
     photo_id = fields.Str(required=True, load_only=True)
     type = fields.Str(

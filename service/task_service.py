@@ -39,6 +39,7 @@ class TaskService:
         task_id = uuid4()
         db_task.id = task_id
         db_task.type = oh_task.get_type()
+        db_task.photo_id = oh_task.get_photo_id()
         oh_task.db_task_id = db_task.id
 
         transaction = DBSession()

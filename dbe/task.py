@@ -12,10 +12,12 @@ from domain.task.task_status import TaskStatus
 from domain.task.task_type import TaskType
 
 
+
 class Task(Base):
     __tablename__ = "task"
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    photo_id: Mapped[Optional[UUID]]
     name: Mapped[Optional[str]]
 
     type: Mapped[TaskType] = mapped_column(
@@ -42,6 +44,8 @@ class Task(Base):
 
     error_msg: Mapped[Optional[str]]
 
+def find_by_photo_id_and_type(session: Session, photo_id: UUID, task_type: TaskType) -> Optional["Task"]:
+    return session.query(Task).filter_by(photo_id=photo_id, type=task_type).first()
 
 def find_by_id(session: Session, id):
     return session.query(Task).filter_by(id=id).first()

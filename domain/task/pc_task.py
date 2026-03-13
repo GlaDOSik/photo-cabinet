@@ -81,6 +81,9 @@ class PhotoCabinetTask(ABC):
     def get_type(self) -> TaskType:
         pass
 
+    def get_photo_id(self):
+        return None
+
     @abstractmethod
     def execute(self):
         pass

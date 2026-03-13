@@ -6,11 +6,12 @@ from sqlalchemy.orm import Session
 
 from dbe.app_data import get_app_data_val
 from dbe.photo import Photo
-from dbe.task import find_by_id as find_task_by_id
+from dbe.task import find_by_photo_id_and_type
 from domain.app_data_field import AppDataField
 from domain.metadata.metadata_sets import CREATE_DATE_SET, PHOTO_SIZE_SET
 from domain.task.task_status import TaskStatus
-from indexing.dbe.metadata_cache import MetadataCache
+from domain.task.task_type import TaskType
+from indexing.dbe.metadata_cache import MetadataLiveCache, find_by_photo_id as find_cache_by_photo_id
 from indexing.dbe.metadata_index import MetadataIndex
 from indexing.dbe.metadata_indexing_group import find_matching_groups, MetadataIndexingGroup
 from indexing.domain.created_date_result import CreatedDateResult
@@ -22,42 +23,30 @@ from service import image_service
 from service.task.implementation.cache_metadata_task import CacheMetadataTask
 from service.task_service import task_service
 
-def _submit_cache_task(session: Session, cache: MetadataCache) -> UUID:
-    oh_task = CacheMetadataTask(metadata_index_id=cache.metadata_index_id)
-    task_id = task_service.create_task(oh_task)
-    cache.task_id = task_id
-    return task_id
+def _submit_cache_task(session: Session, photo_id: UUID) -> UUID:
+    oh_task = CacheMetadataTask(photo_id=photo_id)
+    return task_service.create_task(oh_task)
 
 def get_or_submit_live_cache(session: Session, photo: Photo, ttl_sec: int) -> tuple[Optional[dict], Optional[UUID]]:
     """
     Returns (full_json, None) if cache is fresh and ready.
     Returns (None, task_id) if a task was submitted or is already running.
     """
-    cache = photo.metadata_index.cache
-    # No cache
-    if cache is None:
-        cache = MetadataCache(metadata_index_id=photo.metadata_index.id)
-        session.add(cache)
-        session.flush()
-        task_id = _submit_cache_task(session, cache)
-        return None, task_id
+    # Check if a cache task is already active
+    active_task = find_by_photo_id_and_type(session, photo.id, TaskType.CACHE_METADATA)
+    if active_task is not None and active_task.status in (TaskStatus.WAITING, TaskStatus.IN_PROGRESS):
+        return None, active_task.id
 
-    # Task in progress or error
-    if cache.task_id is not None:
-        task = find_task_by_id(session, cache.task_id)
-        if task is not None and task.status in (TaskStatus.WAITING, TaskStatus.IN_PROGRESS):
-            return None, cache.task_id
-        task_id = _submit_cache_task(session, cache)
-        return None, task_id
+    cache = find_cache_by_photo_id(session, photo.id)
 
-    # Cache not populated with JSON
-    if cache.full_json is None:
-        task_id = _submit_cache_task(session, cache)
+    # No cache or not populated
+    if cache is None or cache.full_json is None:
+        task_id = _submit_cache_task(session, photo.id)
         return None, task_id
 
     # Cache expired
     if (datetime.utcnow() - cache.created_at).total_seconds() > ttl_sec:
-        task_id = _submit_cache_task(session, cache)
+        task_id = _submit_cache_task(session, photo.id)
         return None, task_id
 
     return cache.full_json, None

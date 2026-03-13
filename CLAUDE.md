@@ -81,13 +81,7 @@ Enums: `PascalCase` type with `UPPER_SNAKE_CASE` members (see `domain/ordering_t
 DB model classes: singular nouns (`Photo`, `Folder`, ...), table names in `__tablename__` match existing schema.
 
 # API Layer (flask-smorest)
-Keep endpoint functions thin: validate/parse inputs, fetch `transaction_session`, call a `service.*` function or `dbe.*` repo function or facade, map to response.
-Parse UUIDs explicitly and return `abort(400)` on invalid UUIDs (pattern used in `blueprint/api/*`).
-Prefer Marshmallow Schemas for request/response payloads:
-- `*_requests.py`: `Schema` definitions + small `@staticmethod` helpers to extract typed values
-- `*_responses.py`: `Schema` definitions + `to_resp(...)` mapping functions that return simple dicts
-Use `@blueprint.arguments(Schema, location="json")` for JSON bodies and `@blueprint.response(code, Schema)` for responses
-Register blueprints in flask_application.py register_blueprints.
+See `/create-api` skill for full patterns. Keep endpoints thin: parse inputs, fetch session, call service/facade, return `to_resp()`. Register blueprints in `flask_application.py`.
 
 # DB Session / Transactions
 Request-scoped session is created in `flask_application.create_app()` and stored in `g.transaction_session`
